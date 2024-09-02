@@ -1,0 +1,33 @@
+{
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    },
+    "editor.formatOnSave": true,
+    "[sql]": {
+      "editor.formatOnSave": false
+    },
+    "editor.rulers": [120],
+    "editor.tabCompletion": "on",
+    "editor.tabSize": 2,
+    "editor.trimAutoWhitespace": true,
+    "files.exclude": {
+      "**/.DS_Store": true,
+      "**/.git": true,
+      "**/.hg": true,
+      "**/.svn": true,
+      "**/CVS": true,
+      "**/.gitkeep": true
+    },
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true,
+    "files.trimTrailingWhitespace": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "tailwindCSS.experimental.classRegex": [
+      "[a-zA-Z]ClassName?=\\s*(?:\"|')([^(?:\"|')]*)",
+      ["classnames\\(([^)]*)\\)", "'([^']*)'"],
+      "className\\:\\s*(?:\"|')([^(?:\"|')]*)"
+    ],
+    "search.exclude": {
+      "**/.next": true
+    },
+  }
