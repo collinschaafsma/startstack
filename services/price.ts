@@ -1,7 +1,7 @@
 import "server-only"
 import { and, eq } from "drizzle-orm"
 import { db } from "@/drizzle/db"
-import { Price, prices } from "@/drizzle/schema"
+import { Price, prices, products } from "@/drizzle/schema"
 import { logger } from "@/lib/logger"
 import { stripe } from "@/lib/stripe"
 
@@ -44,9 +44,19 @@ export const price = {
    * This function is used to upsert a price by its ID.
    *
    * @param {string} priceId - The ID of the price to upsert.
+   * @param {number} retryCount - The number of times to retry the upsert (used internally for retries).
+   * @param {number} maxRetries - The maximum number of retries to attempt (used internally for retries).
    * @returns {Promise<void>} - This function does not return anything.
    **/
-  async upsert({ priceId }: { priceId: string }) {
+  async upsert({
+    priceId,
+    retryCount = 0,
+    maxRetries = 3,
+  }: {
+    priceId: string
+    retryCount?: number
+    maxRetries?: number
+  }) {
     try {
       const data = await stripe.prices.retrieve(priceId)
 
@@ -64,10 +74,33 @@ export const price = {
         unitAmount: data.unit_amount ?? 0,
       }
 
-      await db
-        .insert(prices)
-        .values(priceData)
-        .onConflictDoUpdate({ target: prices.id, set: priceData })
+      // check to see if the product exists
+      const existingProduct = await db.query.products.findFirst({
+        where: eq(products.id, priceData.productId),
+      })
+
+      if (existingProduct) {
+        await db
+          .insert(prices)
+          .values(priceData)
+          .onConflictDoUpdate({ target: prices.id, set: priceData })
+
+        return
+      }
+
+      if (retryCount < maxRetries) {
+        logger.info(
+          "no product found to associate price to, retrying in 3 seconds",
+          { retryCount, maxRetries }
+        )
+        await new Promise(resolve => setTimeout(resolve, 3000))
+        await price.upsert({ priceId, retryCount: retryCount + 1 })
+      } else {
+        logger.info(
+          "no product found to associate price to, max retries reached",
+          { retryCount, maxRetries }
+        )
+      }
     } catch (error) {
       logger.error("[price][upsert]", { error })
     }
