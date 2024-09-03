@@ -114,7 +114,7 @@ export default function SubscriptionPlanCard() {
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>Support Plan Subscription</CardTitle>
+        <CardTitle>Subscription</CardTitle>
         <CardDescription>Manage your subscription</CardDescription>
       </CardHeader>
       <ErrorBoundary fallback={<SubscriptionPlanErrorFallback />}>
