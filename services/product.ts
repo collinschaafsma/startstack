@@ -66,6 +66,14 @@ export const product = {
         product.prices.some(price => price.type === "recurring")
       )
 
+      // order the recurringProducts by price asc (show the cheapest first)
+      recurringProducts.sort((a, b) => {
+        const maxPriceA = Math.max(...a.prices.map(price => price.unitAmount))
+        const maxPriceB = Math.max(...b.prices.map(price => price.unitAmount))
+
+        return maxPriceA - maxPriceB
+      })
+
       return { oneTimeProducts, recurringProducts }
     } catch (error) {
       logger.error("[product][getAll]", { error })
