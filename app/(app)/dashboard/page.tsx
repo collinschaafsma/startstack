@@ -6,7 +6,6 @@ import {
   BreadcrumbPage,
 } from "@/components/ui/breadcrumb"
 import Header from "../_components/header"
-import Search from "../_components/search"
 import InvoiceCard from "./_components/invoice-card"
 import PaymentMethodCard from "./_components/payment-method-card"
 import SubscriptionPlanCard from "./_components/subscription-plan-card"
@@ -36,7 +35,6 @@ export default function DashboardPage({
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <Search />
       </Header>
       <main className="flex-1 p-6 md:p-4 md:py-0">
         <div className="grid gap-4 md:max-w-screen-xl md:grid-cols-2">
