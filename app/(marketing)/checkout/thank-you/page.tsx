@@ -1,5 +1,9 @@
+import Link from "next/link"
 import { checkout } from "@/services/checkout"
+import { appName } from "@/lib/constants"
 import { logger } from "@/lib/logger"
+import { Button } from "@/components/ui/button"
+import { AuthBoundary } from "@/components/boundaries"
 
 export default async function ThankYouPage({
   searchParams,
@@ -29,6 +33,26 @@ export default async function ThankYouPage({
           <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
             Thank you!
           </h2>
+          <AuthBoundary
+            alternate={
+              <p className="mx-auto max-w-[600px] text-sm text-gray-500 dark:text-gray-400 md:text-xl">
+                You are minutes away from getting started with {appName}. An
+                email was sent to{" "}
+                <strong>
+                  {checkoutResponse.session.customer_details?.email}
+                </strong>{" "}
+                with a magic link to login.
+              </p>
+            }
+          >
+            <p className="mx-auto max-w-[600px] text-sm text-gray-500 dark:text-gray-400 md:text-xl">
+              <Button asChild>
+                <Link href="/dashboard">
+                  Go to your dashboard to get started
+                </Link>
+              </Button>
+            </p>
+          </AuthBoundary>
         </div>
       </div>
     </div>
