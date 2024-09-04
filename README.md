@@ -207,7 +207,7 @@ pnpm db:studio
 RESEND_NEWSLETTER_AUDIENCE_ID="YOUR-AUDIENCE-ID"
 ```
 
-## Setup PostHog
+## Setup PostHog (Optional)
 
 1. Sign up for a [PostHog](https://posthog.com/) account.
 2. Create a new project and click on `Settings`.
@@ -220,9 +220,42 @@ RESEND_NEWSLETTER_AUDIENCE_ID="YOUR-AUDIENCE-ID"
 </script>
 ```
 
-3. Update the `NEXT_PUBLIC_POSTHOG_KEY`, `NEXT_PUBLIC_POSTHOG_HOST` in your `.env` file.
+4. Update the `NEXT_PUBLIC_POSTHOG_KEY`, `NEXT_PUBLIC_POSTHOG_HOST` in your `.env` file.
 
 ```bash
-NEXT_PUBLIC_POSTHOG_KEY="YOUR-API-KEY"
-NEXT_PUBLIC_POSTHOG_HOST="YOUR-HOST"
+NEXT_PUBLIC_POSTHOG_KEY="<YOUR-POSTHOG-KEY>"
+NEXT_PUBLIC_POSTHOG_HOST="<YOUR-POSTHOG-HOST>"
 ```
+
+## Setup Sentry (Optional)
+
+1. Sign up for a [Sentry](https://sentry.io/) account.
+2. Click on `Settings`. Note the `Organization Slug`.
+3. Update the `SENTRY_ORG` in your `.env` file.
+
+```bash
+SENTRY_ORG="<YOUR-ORGANIZATION-SLUG>"
+```
+
+4. Create a new project and note the `Project Name`.
+5. Update the `SENTRY_PROJECT` in your `.env` file.
+
+```bash
+SENTRY_PROJECT="<YOUR-PROJECT-NAME>"
+```
+
+6. Create a new auth token. Click `Settings` -> `Auth Tokens` -> `Create Auth Token`.
+7. Update the `SENTRY_AUTH_TOKEN` in your `.env` file.
+
+```bash
+SENTRY_AUTH_TOKEN="<YOUR-AUTH-TOKEN>"
+```
+
+8. Create a new client key. Click `Settings` -> `Client Keys` copy the DSN or `Generate New Key`.
+9. Update the `NEXT_PUBLIC_SENTRY_DSN` in your `.env` file.
+
+```bash
+NEXT_PUBLIC_SENTRY_DSN="<YOUR-DSN>"
+```
+
+> **Note:** Full documentation on setting up Sentry can be found [here](https://www.startstack.io/docs/sentry).
