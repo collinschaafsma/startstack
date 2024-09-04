@@ -7,7 +7,6 @@ import { baseUrl, postHogEnabled } from "@/lib/constants"
 if (typeof window !== "undefined" && postHogEnabled) {
   posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY!, {
     api_host: `${baseUrl}/ingest`, // Client side, we use a proxy, see: https://posthog.com/docs/advanced/proxy/nextjs
-    ui_host: process.env.NEXT_PUBLIC_POSTHOG_UI_HOST,
     capture_pageview: false, // Disable automatic pageview capture, as we capture manually in post-hog-page-view.tsx
   })
 }
