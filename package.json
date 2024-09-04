@@ -12,7 +12,8 @@
     "db:studio": "drizzle-kit studio",
     "db:generate": "drizzle-kit generate",
     "stripe:listen": "stripe listen --forward-to localhost:3000/api/webhooks/stripe",
-    "stripe:login": "stripe login"
+    "stripe:login": "stripe login",
+    "grant:admin:role": "tsx drizzle/grant-admin-role.ts"
   },
   "dependencies": {
     "@auth/core": "^0.34.1",
