@@ -4,7 +4,7 @@ export default auth(req => {
   // Look for session required routes
   if (
     !req.auth &&
-    ["/dashboard"].some(route => req.nextUrl.pathname.includes(route))
+    ["/account"].some(route => req.nextUrl.pathname.includes(route))
   ) {
     const newUrl = new URL(
       `/sign-in?redirectTo=${req.nextUrl.pathname}`,
@@ -27,7 +27,7 @@ export default auth(req => {
 })
 
 export const config = {
-  matcher: ["/admin/:path*", "/dashboard/:path*"],
+  matcher: ["/admin/:path*", "/account/:path*"],
 }
 
 // If you don't want to use the middleware to check for the role and the page they are on

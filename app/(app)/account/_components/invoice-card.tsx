@@ -130,7 +130,7 @@ async function LoadPagination({ page }: Readonly<{ page: number }>) {
         )}
       >
         <Link
-          href="/dashboard?page=1"
+          href="/account?page=1"
           aria-disabled={firstPageDisabled}
           tabIndex={firstPageDisabled ? -1 : 0}
           className={firstPageDisabled ? "pointer-events-none" : ""}
@@ -148,7 +148,7 @@ async function LoadPagination({ page }: Readonly<{ page: number }>) {
         )}
       >
         <Link
-          href={`/dashboard?page=${previousPage}`}
+          href={`/account?page=${previousPage}`}
           aria-disabled={previousPageDisabled}
           tabIndex={previousPageDisabled ? -1 : 0}
           className={previousPageDisabled ? "pointer-events-none" : ""}
@@ -166,7 +166,7 @@ async function LoadPagination({ page }: Readonly<{ page: number }>) {
         )}
       >
         <Link
-          href={`/dashboard?page=${nextPage}`}
+          href={`/account?page=${nextPage}`}
           aria-disabled={nextPageDisabled}
           tabIndex={nextPageDisabled ? -1 : 0}
           className={nextPageDisabled ? "pointer-events-none" : ""}
@@ -184,7 +184,7 @@ async function LoadPagination({ page }: Readonly<{ page: number }>) {
         )}
       >
         <Link
-          href={`/dashboard?page=${totalPages}`}
+          href={`/account?page=${totalPages}`}
           aria-disabled={lastPageDisabled}
           tabIndex={lastPageDisabled ? -1 : 0}
           className={lastPageDisabled ? "pointer-events-none" : ""}

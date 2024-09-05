@@ -30,13 +30,13 @@ export async function updatePaymentMethodViaBillingPortal() {
 
     url = await billingPortal.sessions.createURL({
       customer: user.customerId,
-      return_url: `${baseUrl}/dashboard`,
+      return_url: `${baseUrl}/account`,
       flow_data: {
         type: "payment_method_update",
         after_completion: {
           type: "redirect",
           redirect: {
-            return_url: `${baseUrl}/dashboard`,
+            return_url: `${baseUrl}/account`,
           },
         },
       },
@@ -65,7 +65,7 @@ export async function cancelSubscriptionViaBillingPortal() {
 
     url = await billingPortal.sessions.createURL({
       customer: userWithCustomerId.customerId,
-      return_url: `${baseUrl}/dashboard`,
+      return_url: `${baseUrl}/account`,
       flow_data: {
         type: "subscription_cancel",
         subscription_cancel: {
@@ -74,7 +74,7 @@ export async function cancelSubscriptionViaBillingPortal() {
         after_completion: {
           type: "redirect",
           redirect: {
-            return_url: `${baseUrl}/dashboard`,
+            return_url: `${baseUrl}/account`,
           },
         },
       },
@@ -103,7 +103,7 @@ export async function updateSubscriptionViaBillingPortal() {
 
     url = await billingPortal.sessions.createURL({
       customer: userWithCustomerId.customerId,
-      return_url: `${baseUrl}/dashboard`,
+      return_url: `${baseUrl}/account`,
       flow_data: {
         type: "subscription_update",
         subscription_update: {
@@ -112,7 +112,7 @@ export async function updateSubscriptionViaBillingPortal() {
         after_completion: {
           type: "redirect",
           redirect: {
-            return_url: `${baseUrl}/dashboard`,
+            return_url: `${baseUrl}/account`,
           },
         },
       },

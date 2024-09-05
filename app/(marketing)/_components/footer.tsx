@@ -23,7 +23,7 @@ export default function Footer() {
           <h3 className="font-semibold">Quick Links</h3>
           <ul className="mt-4 grid grid-cols-2 gap-2 text-sm text-gray-500 dark:text-gray-400">
             <li>
-              <Link href="/dashboard">Customer Dashboard</Link>
+              <Link href="/account">Account</Link>
             </li>
             <li>
               <Link href="/legal/privacy-policy">Privacy Policy</Link>

@@ -380,12 +380,12 @@ export const checkout = {
         })
 
         // 4. send the user a welcome email with a magic link if they are making a one time purchase
-        // so that they can login to the dashboard and access the product
+        // so that they can login and access the product
         if (data.mode === "payment") {
           await signIn("resend", {
             email,
             redirect: false,
-            redirectTo: "/dashboard",
+            redirectTo: "/account",
           })
         }
       } catch (error) {

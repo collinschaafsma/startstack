@@ -47,9 +47,7 @@ export default async function ThankYouPage({
           >
             <p className="mx-auto max-w-[600px] text-sm text-gray-500 dark:text-gray-400 md:text-xl">
               <Button asChild>
-                <Link href="/dashboard">
-                  Go to your dashboard to get started
-                </Link>
+                <Link href="/account">Go to your account</Link>
               </Button>
             </p>
           </AuthBoundary>

@@ -11,16 +11,16 @@ import PaymentMethodCard from "./_components/payment-method-card"
 import SubscriptionPlanCard from "./_components/subscription-plan-card"
 
 export const metadata = {
-  title: "Dashboard",
+  title: "Account",
 }
 
-export default function DashboardPage({
+export default function AccountPage({
   searchParams,
 }: {
   searchParams: { page: string }
 }) {
   const page: number = searchParams.page ? parseInt(searchParams.page) : 1
-  // Preload data for the dashboard
+  // Preload data for the account page
   currentUser.paymentMethods({ limit: 1 })
   currentUser.subscriptions({ limit: 1 })
   currentUser.invoices({ page })
@@ -31,7 +31,7 @@ export default function DashboardPage({
         <Breadcrumb className="hidden md:flex">
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbPage>Dashboard</BreadcrumbPage>
+              <BreadcrumbPage>Account</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>

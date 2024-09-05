@@ -29,12 +29,12 @@ export function DesktopNav() {
         <AuthBoundary>
           <Tooltip>
             <TooltipTrigger>
-              <DesktopNavLink href="/dashboard">
+              <DesktopNavLink href="/account">
                 <Home className="size-5" />
-                <span className="sr-only">Dashboard</span>
+                <span className="sr-only">Account</span>
               </DesktopNavLink>
             </TooltipTrigger>
-            <TooltipContent side="right">Dashboard</TooltipContent>
+            <TooltipContent side="right">Account</TooltipContent>
           </Tooltip>
         </AuthBoundary>
         <AdminBoundary>
@@ -72,9 +72,9 @@ export function MobileNav() {
             <span className="sr-only">{appName}</span>
           </Link>
           <AuthBoundary>
-            <MobileNavLink href="/dashboard">
+            <MobileNavLink href="/account">
               <Home className="size-5" />
-              Dashboard
+              Account
             </MobileNavLink>
           </AuthBoundary>
           <AdminBoundary>

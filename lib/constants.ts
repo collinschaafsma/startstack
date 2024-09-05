@@ -138,6 +138,6 @@ export const supportedStripeEvents = new Set([
 /**
  * Invoices Per Page Limit
  *
- * This is the number of invoices to show on the dashboard per page.
+ * This is the number of invoices to show.
  */
 export const invoicesLimit = 3
