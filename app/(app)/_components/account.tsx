@@ -1,4 +1,5 @@
 import Image from "next/image"
+import Link from "next/link"
 import { currentUser } from "@/services/currentUser"
 import { Button } from "@/components/ui/button"
 import {
@@ -37,6 +38,12 @@ export default async function Account() {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>{user.email}</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem>
+          <Link className="w-full" href="/account">
+            Account
+          </Link>
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
           <SignOutLink />
