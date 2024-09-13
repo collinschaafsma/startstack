@@ -19,6 +19,7 @@ import {
   users,
 } from "@/drizzle/schema"
 import { signIn } from "@/auth"
+import captureEvent from "@/lib/capture-event"
 import {
   allowPromotionCodes,
   baseUrl,
@@ -138,6 +139,18 @@ export const checkout = {
             promotions: "auto",
           },
           return_url: `${baseUrl}/checkout/thank-you?id={CHECKOUT_SESSION_ID}`,
+        })
+
+        // capture the event in posthog
+        after(async () => {
+          await captureEvent({
+            event: "checkout_session_created",
+            properties: {
+              priceId,
+              stripeCustomerId,
+              sessionId: session.id,
+            },
+          })
         })
 
         return {
@@ -377,6 +390,18 @@ export const checkout = {
               audienceId: resendAudienceId,
             })
           }
+        })
+
+        // capture the event in posthog
+        after(async () => {
+          await captureEvent({
+            event: "checkout_session_completed",
+            properties: {
+              priceId,
+              stripeCustomerId,
+              sessionId,
+            },
+          })
         })
 
         // 4. send the user a welcome email with a magic link if they are making a one time purchase
