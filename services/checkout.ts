@@ -176,7 +176,10 @@ export const checkout = {
      */
     async get({ sessionId }: { sessionId: string }) {
       try {
-        const session = await stripe.checkout.sessions.retrieve(sessionId)
+        const session = await stripe.checkout.sessions.retrieve(sessionId, {
+          expand: ["line_items"],
+        })
+
         return {
           status: "success",
           session,
@@ -390,18 +393,6 @@ export const checkout = {
               audienceId: resendAudienceId,
             })
           }
-        })
-
-        // capture the event in posthog
-        after(async () => {
-          await captureEvent({
-            event: "checkout_session_completed",
-            properties: {
-              priceId,
-              stripeCustomerId,
-              sessionId,
-            },
-          })
         })
 
         // 4. send the user a welcome email with a magic link if they are making a one time purchase

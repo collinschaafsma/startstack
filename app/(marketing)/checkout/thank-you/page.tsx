@@ -1,5 +1,7 @@
 import Link from "next/link"
+import { unstable_after as after } from "next/server"
 import { checkout } from "@/services/checkout"
+import captureEvent from "@/lib/capture-event"
 import { appName } from "@/lib/constants"
 import { logger } from "@/lib/logger"
 import { Button } from "@/components/ui/button"
@@ -25,6 +27,24 @@ export default async function ThankYouPage({
 
     return <div>Unable to process your payment. Please try again.</div>
   }
+
+  // capture the event in posthog
+  after(async () => {
+    if (
+      checkoutResponse.status === "success" &&
+      checkoutResponse.session.status === "complete"
+    ) {
+      await captureEvent({
+        event: "checkout_session_completed",
+        properties: {
+          priceId: checkoutResponse.session.line_items?.data[0].price?.id,
+          amountTotal: checkoutResponse.session.amount_total,
+          stripeCustomerId: checkoutResponse.session.customer,
+          sessionId: checkoutResponse.session.id,
+        },
+      })
+    }
+  })
 
   return (
     <div className="container px-4 md:px-6">
