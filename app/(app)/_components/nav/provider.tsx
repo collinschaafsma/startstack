@@ -17,7 +17,8 @@ export function NavProvider({ children }: Readonly<{ children: ReactNode }>) {
   const segments = useSelectedLayoutSegments()
 
   function isActiveLink(href: string) {
-    return `/${segments?.join("/")}` === href
+    const currentPath = `/${segments?.join("/")}`
+    return currentPath.includes(href)
   }
 
   function closeNav() {
