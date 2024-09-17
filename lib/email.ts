@@ -18,7 +18,7 @@ export const customSendVerificationRequest = async (params: {
 }) => {
   const { identifier: to, provider, url, theme } = params
   const { host } = new URL(url)
-  const res = await fetch("https://api.resend.com/emails", {
+  await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
       Authorization: `Bearer ${provider.apiKey}`,

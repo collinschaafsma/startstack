@@ -26,7 +26,7 @@ export default function SignInForm({
   )
 
   const [_state, formAction, isPending] = useActionState(
-    async (_prevState: any, formData: FormData) => {
+    async (_prevState: unknown, formData: FormData) => {
       const email = formData.get("email") as string
       const redirectTo = formData.get("redirectTo") as string
       const provider = formData.get("provider") as string

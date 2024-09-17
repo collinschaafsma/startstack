@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { captureException } from "@sentry/nextjs"
 import { sentryEnabled } from "./constants"
 
