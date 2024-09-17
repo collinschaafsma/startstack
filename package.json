@@ -13,7 +13,11 @@
     "db:generate": "drizzle-kit generate",
     "stripe:listen": "stripe listen --forward-to localhost:3000/api/webhooks/stripe",
     "stripe:login": "stripe login",
-    "grant:admin:role": "tsx drizzle/grant-admin-role.ts"
+    "grant:admin:role": "tsx drizzle/grant-admin-role.ts",
+    "typecheck": "tsc --noEmit",
+    "format:write": "prettier --write \"**/*.{ts,tsx,mdx}\" --cache",
+    "format:check": "prettier --check \"**/*.{ts,tsx,mdx}\" --cache",
+    "preview": "next build && next start"
   },
   "dependencies": {
     "@auth/core": "^0.34.1",
