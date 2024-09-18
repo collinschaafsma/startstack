@@ -67,7 +67,7 @@ async function LoadAdminBoundary({
  * @param {React.ReactNode | string} alternate - The component or string to be rendered if the user is not an admin.
  * @param {React.ReactNode} fallback - The fallback component to be rendered while the user is being checked.
  */
-export async function AdminBoundary({
+export function AdminBoundary({
   children,
   fallback,
 }: Readonly<{
@@ -113,7 +113,7 @@ async function LoadSubscriptionCanceledBoundary({
  * @param {React.ReactNode | string} alternate - The component or string to be rendered if the user has not canceled their subscription.
  * @param {React.ReactNode} fallback - The fallback component to be rendered while the user is being checked.
  */
-export async function SubscriptionCanceledBoundary({
+export function SubscriptionCanceledBoundary({
   children,
   alternate,
   fallback,
