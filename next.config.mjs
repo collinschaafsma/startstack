@@ -27,7 +27,7 @@ const nextConfig = {
         source: "/sitemap.xml",
         destination: "/sitemap",
       },
-      // posthog proxy
+      // posthog proxy: https://posthog.com/docs/advanced/proxy/nextjs
       {
         source: "/ingest/static/:path*",
         destination: "https://us-assets.i.posthog.com/static/:path*",
@@ -35,6 +35,10 @@ const nextConfig = {
       {
         source: "/ingest/:path*",
         destination: "https://us.i.posthog.com/:path*",
+      },
+      {
+        source: "/ingest/decide",
+        destination: "https://us.i.posthog.com/decide",
       },
     ]
   },
