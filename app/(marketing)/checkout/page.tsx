@@ -15,7 +15,7 @@ export default async function CheckoutPage({
   })
 
   if (status === "requiresSession") {
-    redirect(`/sign-in?redirectTo=/checkout?p=${p}`)
+    redirect(`/sign-up?redirectTo=/checkout?p=${p}`)
   }
 
   if (!clientSecret) {
