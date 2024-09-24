@@ -1,13 +1,14 @@
 "use client"
 
 import { useActionState, useEffect, useOptimistic, useState } from "react"
+import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import { LoaderCircle } from "lucide-react"
 import { signInAction } from "@/actions/auth"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import GoogleIcon from "./google-icon"
+import GoogleIcon from "@/components/google-icon"
 
 export default function SignInForm({
   enabledProviders,
@@ -30,7 +31,9 @@ export default function SignInForm({
       const email = formData.get("email") as string
       const redirectTo = formData.get("redirectTo") as string
       const provider = formData.get("provider") as string
+
       addOptimisticSignIn(provider)
+
       if (provider === "resend") {
         setKeepFormHidden(true)
       }
@@ -129,6 +132,12 @@ export default function SignInForm({
               <p className="flex w-full justify-center rounded-md border border-gray-300 bg-muted p-4 text-sm text-gray-500 dark:text-gray-400 md:text-xs">
                 We&apos;ll email you a magic link for a password-free sign in.
               </p>
+              <p className="flex w-full text-sm text-gray-500 dark:text-gray-400 md:text-xs">
+                Don&apos;t have an account?{" "}
+                <Link href="/sign-up" className="pl-2 text-primary underline">
+                  Sign up
+                </Link>
+              </p>
             </>
           )}
         </form>
@@ -145,14 +154,14 @@ export default function SignInForm({
             {hasError
               ? "Something went wrong. Please try again."
               : optimisticSignIn === "google"
-                ? "Hitting up Google..."
+                ? "Connecting with Google..."
                 : "Thank you! Check your email for a magic link."}
           </p>
           <p aria-live="polite" className="sr-only" role="status">
             {hasError
               ? "Something went wrong. Please try again."
               : optimisticSignIn === "google"
-                ? "Hitting up Google..."
+                ? "Connecting with Google..."
                 : "Thank you! Check your email for a magic link."}
           </p>
         </>
