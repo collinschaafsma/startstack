@@ -15,8 +15,8 @@ import {
 import { cn } from "@/lib/utils"
 import { PostHogProvider } from "@/components/post-hog-provider"
 import { ThemeProvider } from "@/components/theme-provider"
-import Footer from "./_components/footer"
-import Header from "./_components/header"
+import { Footer } from "./_components/footer"
+import { Header } from "./_components/header"
 
 const PostHogPageView = dynamic(
   () => import("@/components/post-hog-page-view"),

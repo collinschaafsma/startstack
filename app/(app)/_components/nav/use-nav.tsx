@@ -1,7 +1,7 @@
 import { useContext } from "react"
 import { NavContext, NavContextInterface } from "./provider"
 
-export default function useNav() {
+export function useNav() {
   const context = useContext(NavContext) as NavContextInterface
 
   if (context === undefined) {

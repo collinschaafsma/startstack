@@ -24,7 +24,7 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
-export default function NewsletterForm() {
+export function NewsletterForm() {
   const [hasError, setHasError] = useState<boolean>(false)
 
   const [optimisticEmail, addOptimisticEmail] = useOptimistic(

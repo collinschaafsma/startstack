@@ -1,9 +1,9 @@
 "use client"
 
 import { Sheet } from "@/components/ui/sheet"
-import useNav from "./use-nav"
+import { useNav } from "./use-nav"
 
-export default function MobileSheet({
+export function MobileSheet({
   children,
 }: Readonly<{
   children: React.ReactNode

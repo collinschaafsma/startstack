@@ -4,7 +4,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
 } from "@/components/ui/breadcrumb"
-import Header from "../_components/header"
+import { Header } from "../_components/header"
 
 export const metadata = {
   title: "Admin",

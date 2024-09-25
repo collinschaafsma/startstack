@@ -10,9 +10,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import SignOutLink from "./sign-out-link"
+import { SignOutLink } from "./sign-out-link"
 
-export default async function Account() {
+export async function Account() {
   const user = await currentUser()
   if (!user) {
     return null

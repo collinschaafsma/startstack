@@ -1,4 +1,4 @@
-export default function GoogleIcon() {
+export function GoogleIcon() {
   return (
     <svg
       className="mr-2 size-5"

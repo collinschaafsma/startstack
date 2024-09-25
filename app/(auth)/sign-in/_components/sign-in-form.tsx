@@ -8,7 +8,7 @@ import { signInAction } from "@/actions/auth"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import GoogleIcon from "@/components/google-icon"
+import { GoogleIcon } from "@/components/google-icon"
 
 export default function SignInForm({
   enabledProviders,

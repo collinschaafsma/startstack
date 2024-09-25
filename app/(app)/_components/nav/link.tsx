@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { cn } from "@/lib/utils"
-import useNav from "./use-nav"
+import { useNav } from "./use-nav"
 
 export function DesktopNavLink({
   children,

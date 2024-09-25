@@ -18,7 +18,7 @@ type Event = Omit<EventMessage, "distinctId"> & { distinctId?: string }
  *
  * @link https://posthog.com/docs/product-analytics/capture-events?tab=Node.js
  **/
-export default async function captureEvent(event: Event) {
+export async function captureEvent(event: Event) {
   if (!postHogEnabled) {
     logger.info("PostHog is disabled, not capturing event", event)
     return

@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils"
  * @param {React.AnchorHTMLAttributes<HTMLAnchorElement>} props - The props for an anchor tag.
  */
 
-export default function LinkExternal({
+export function LinkExternal({
   href,
   children,
   ...props

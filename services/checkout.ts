@@ -19,7 +19,7 @@ import {
   users,
 } from "@/drizzle/schema"
 import { signIn } from "@/auth"
-import captureEvent from "@/lib/capture-event"
+import { captureEvent } from "@/lib/capture-event"
 import {
   allowPromotionCodes,
   baseUrl,

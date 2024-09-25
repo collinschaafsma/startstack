@@ -18,7 +18,7 @@ import {
  *
  * @param {string} buttonClassName - Additional class names to apply to the button.
  */
-export default function ThemeToggle({
+export function ThemeToggle({
   buttonClassName,
 }: Readonly<{ buttonClassName?: string }>) {
   const { setTheme } = useTheme()

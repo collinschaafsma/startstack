@@ -7,7 +7,7 @@ import {
 import { loadStripe } from "@stripe/stripe-js"
 import { logger } from "@/lib/logger"
 
-export default function EmbeddedStripeForm({
+export function EmbeddedStripeForm({
   clientSecret,
 }: Readonly<{
   clientSecret: string

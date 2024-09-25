@@ -5,7 +5,7 @@ import posthog from "posthog-js"
 import { signOutAction } from "@/actions/auth"
 import { Button } from "@/components/ui/button"
 
-export default function SignOutLink() {
+export function SignOutLink() {
   const router = useRouter()
 
   async function signOut() {

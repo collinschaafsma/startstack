@@ -110,7 +110,7 @@ async function LoadSubscriptionPlanCard() {
   )
 }
 
-export default function SubscriptionPlanCard() {
+export function SubscriptionPlanCard() {
   return (
     <Card className="w-full">
       <CardHeader>

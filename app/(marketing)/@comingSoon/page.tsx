@@ -1,5 +1,5 @@
 import { appDescription, appName } from "@/lib/constants"
-import NewsletterForm from "../_components/newsletter-form"
+import { NewsletterForm } from "../_components/newsletter-form"
 
 export default function ComingSoonPage() {
   return (

@@ -13,7 +13,7 @@
 import { unstable_after as after } from "next/server"
 import { Resend } from "resend"
 import { z } from "zod"
-import captureEvent from "@/lib/capture-event"
+import { captureEvent } from "@/lib/capture-event"
 import { resendAudienceId, resendEnabled } from "@/lib/constants"
 import { logger } from "@/lib/logger"
 

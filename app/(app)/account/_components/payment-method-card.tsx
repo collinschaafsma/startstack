@@ -92,7 +92,7 @@ async function LoadPaymentMethodCard() {
   )
 }
 
-export default function PaymentMethodCard() {
+export function PaymentMethodCard() {
   return (
     <Card className="w-full">
       <CardHeader>

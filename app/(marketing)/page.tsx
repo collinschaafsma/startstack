@@ -6,7 +6,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible"
-import LinkExternal from "@/components/link-external"
+import { LinkExternal } from "@/components/link-external"
 import { Products } from "./_components/products"
 
 export default function Home() {

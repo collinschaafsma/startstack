@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils"
 
-export default function Logo(props: React.ComponentProps<"svg">) {
+export function Logo(props: React.ComponentProps<"svg">) {
   return (
     <svg
       version="1.1"

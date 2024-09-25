@@ -5,10 +5,10 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
 } from "@/components/ui/breadcrumb"
-import Header from "../_components/header"
-import InvoiceCard from "./_components/invoice-card"
-import PaymentMethodCard from "./_components/payment-method-card"
-import SubscriptionPlanCard from "./_components/subscription-plan-card"
+import { Header } from "../_components/header"
+import { InvoiceCard } from "./_components/invoice-card"
+import { PaymentMethodCard } from "./_components/payment-method-card"
+import { SubscriptionPlanCard } from "./_components/subscription-plan-card"
 
 export const metadata = {
   title: "Account",

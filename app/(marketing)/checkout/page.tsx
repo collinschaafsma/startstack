@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation"
 import { checkout } from "@/services/checkout"
-import EmbeddedStripeForm from "./_components/embedded-stripe-form"
+import { EmbeddedStripeForm } from "./_components/embedded-stripe-form"
 
 export default async function CheckoutPage({
   searchParams,

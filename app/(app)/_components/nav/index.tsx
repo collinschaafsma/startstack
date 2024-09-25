@@ -10,9 +10,9 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { AdminBoundary, AuthBoundary } from "@/components/boundaries"
-import Logo from "@/components/logo"
+import { Logo } from "@/components/logo"
 import { DesktopNavLink, MobileNavLink } from "./link"
-import MobileSheet from "./mobile-sheet"
+import { MobileSheet } from "./mobile-sheet"
 
 export function DesktopNav() {
   return (

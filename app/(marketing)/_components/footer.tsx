@@ -1,12 +1,12 @@
 import Image from "next/image"
 import Link from "next/link"
 import { appDescription, appName, twitterSite } from "@/lib/constants"
-import LinkExternal from "@/components/link-external"
-import Logo from "@/components/logo"
-import ThemeToggle from "@/components/theme-toggle"
-import NewsletterForm from "./newsletter-form"
+import { LinkExternal } from "@/components/link-external"
+import { Logo } from "@/components/logo"
+import { ThemeToggle } from "@/components/theme-toggle"
+import { NewsletterForm } from "./newsletter-form"
 
-export default function Footer() {
+export function Footer() {
   return (
     <footer className="bg-gray-100 py-12 dark:bg-gray-800">
       <div className="container grid grid-cols-1 gap-8 md:grid-cols-3">

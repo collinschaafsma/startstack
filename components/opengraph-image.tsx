@@ -1,8 +1,8 @@
 import { ImageResponse } from "next/og"
 import { appDescription, appName } from "@/lib/constants"
-import Logo from "./logo"
+import { Logo } from "./logo"
 
-export default async function OpengraphImage(
+export async function OpengraphImage(
   props?: Readonly<{ title?: string }>
 ): Promise<ImageResponse> {
   const { title } = {

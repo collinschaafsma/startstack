@@ -30,7 +30,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { ErrorBoundary } from "@/components/error-boundary"
-import LinkExternal from "@/components/link-external"
+import { LinkExternal } from "@/components/link-external"
 
 function InvoicesErrorFallback() {
   return (
@@ -197,7 +197,7 @@ async function LoadPagination({ page }: Readonly<{ page: number }>) {
   )
 }
 
-export default function InvoiceCard({ page }: Readonly<{ page: number }>) {
+export function InvoiceCard({ page }: Readonly<{ page: number }>) {
   return (
     <Card className="w-full">
       <CardHeader>

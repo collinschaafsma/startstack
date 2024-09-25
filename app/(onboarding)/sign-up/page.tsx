@@ -2,7 +2,7 @@ import { Suspense } from "react"
 import Link from "next/link"
 import { providers } from "@/auth"
 import { appName } from "@/lib/constants"
-import Logo from "@/components/logo"
+import { Logo } from "@/components/logo"
 import SignUpForm from "./_components/sign-up-form"
 
 export const metadata = {

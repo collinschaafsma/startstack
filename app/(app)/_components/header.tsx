@@ -1,12 +1,10 @@
 import { Suspense } from "react"
 import Image from "next/image"
-import ThemeToggle from "@/components/theme-toggle"
-import Account from "./account"
+import { ThemeToggle } from "@/components/theme-toggle"
+import { Account } from "./account"
 import { MobileNav } from "./nav"
 
-export default function Header({
-  children,
-}: Readonly<{ children?: React.ReactNode }>) {
+export function Header({ children }: Readonly<{ children?: React.ReactNode }>) {
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center justify-between gap-4 bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent md:ml-4 md:max-w-screen-xl md:pl-2 md:pr-0">
       <MobileNav />
