@@ -74,10 +74,9 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       session.user.role = user.role
       return session
     },
-    async signIn({ user, profile, account }) {
-      if (user.id && account?.provider === "google") {
-        // user.image = profile?.avatar_url as string
-      }
+    async signIn({}) {
+      // You can add custom sign-in logic here, for example if you want to do a custom check for the user
+      // before signing them in.
 
       return true
     },
