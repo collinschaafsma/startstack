@@ -124,6 +124,7 @@ export const supportedStripeEvents = new Set([
   "checkout.session.completed",
   "customer.subscription.deleted",
   "customer.subscription.updated",
+  "invoice.created",
   "invoice.finalized",
   "invoice.paid",
   "payment_method.attached",

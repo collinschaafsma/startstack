@@ -49,6 +49,7 @@ export const event = {
         break
       case "invoice.finalized":
       case "invoice.paid":
+      case "invoice.created":
         const eventInvoice = constructedEvent.data.object as Stripe.Invoice
         await invoice.upsert({ invoiceId: eventInvoice.id })
         break
