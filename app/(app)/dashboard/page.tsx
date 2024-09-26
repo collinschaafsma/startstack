@@ -26,7 +26,7 @@ export default function DashboardPage() {
         <p>
           Your dashboard page here. Note that only a user with the admin role
           can access this page. Take a look at <code>middleware.ts</code> to see
-          how this is enforced.
+          how this is enforced. Dashboard example coming soon.
         </p>
       </main>
     </div>
