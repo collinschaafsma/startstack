@@ -7,7 +7,7 @@ import {
 import { Header } from "../_components/header"
 
 export const metadata = {
-  title: "Admin",
+  title: "Dashboard",
 }
 
 export default function AdminPage() {
