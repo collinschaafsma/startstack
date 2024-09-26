@@ -236,14 +236,7 @@ export const checkout = {
           )
         }
 
-        // 0.d check if the mode is payment that it has a payment intent
-        if (data.mode === "payment" && !data.payment_intent) {
-          throw new Error(
-            "Mode is payment but no payment intent found, checkout.session.completed processing halted."
-          )
-        }
-
-        // 0.e check if the mode is subscription that it has a subscription
+        // 0.d check if the mode is subscription that it has a subscription
         if (data.mode === "subscription" && !data.subscription) {
           throw new Error(
             "Mode is subscription but no subscription found, checkout.session.completed processing halted."
