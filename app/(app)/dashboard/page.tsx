@@ -17,16 +17,16 @@ export default function AdminPage() {
         <Breadcrumb className="hidden md:flex">
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbPage>Admin</BreadcrumbPage>
+              <BreadcrumbPage>Dashboard</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
       </Header>
       <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
         <p>
-          Your admin page here. Note that only a user with the admin role can
-          access this page. Take a look at <code>middleware.ts</code> to see how
-          this is enforced.
+          Your dashboard page here. Note that only a user with the admin role
+          can access this page. Take a look at <code>middleware.ts</code> to see
+          how this is enforced.
         </p>
       </main>
     </div>

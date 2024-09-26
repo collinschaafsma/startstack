@@ -16,7 +16,7 @@ export default auth(req => {
   // Look for admin session required routes
   if (
     req.auth?.user.role !== "admin" &&
-    ["/admin"].some(route => req.nextUrl.pathname.includes(route))
+    ["/dashboard"].some(route => req.nextUrl.pathname.includes(route))
   ) {
     const newUrl = new URL(
       `/sign-in?redirectTo=${req.nextUrl.pathname}`,
@@ -27,7 +27,7 @@ export default auth(req => {
 })
 
 export const config = {
-  matcher: ["/admin/:path*", "/account/:path*"],
+  matcher: ["/dashboard/:path*", "/account/:path*"],
 }
 
 // If you don't want to use the middleware to check for the role and the page they are on
