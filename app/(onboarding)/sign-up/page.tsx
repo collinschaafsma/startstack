@@ -24,8 +24,8 @@ export default function SignUpPage() {
   )
 
   return (
-    <div className="mx-auto max-w-[400px] space-y-6 py-12">
-      <div className="space-y-2 text-center">
+    <div className="mx-auto max-w-sm space-y-6 py-12">
+      <div className="space-y-2 px-4 text-center md:px-6">
         <div className="flex flex-col items-center gap-8 pb-8">
           <Link
             className="flex items-center justify-center"
