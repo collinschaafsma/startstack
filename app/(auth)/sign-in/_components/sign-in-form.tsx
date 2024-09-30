@@ -130,7 +130,7 @@ export default function SignInForm({
                 Continue With Email
               </Button>
               <p className="flex w-full justify-center rounded-md border border-gray-300 bg-muted p-4 text-sm text-gray-500 dark:text-gray-400 md:text-xs">
-                We&apos;ll email you a magic link for a password-free sign in.
+                We&apos;ll email you a magic link.
               </p>
               <p className="flex w-full text-sm text-gray-500 dark:text-gray-400 md:text-xs">
                 Don&apos;t have an account?{" "}
