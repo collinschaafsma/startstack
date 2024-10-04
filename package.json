@@ -38,13 +38,13 @@
     "drizzle-orm": "^0.33.0",
     "lucide-react": "^0.436.0",
     "nanoid": "^5.0.7",
-    "next": "15.0.0-canary.132",
+    "next": "15.0.0-canary.160",
     "next-auth": "5.0.0-beta.20",
     "next-themes": "^0.3.0",
     "posthog-js": "^1.161.5",
     "posthog-node": "^4.2.0",
-    "react": "19.0.0-rc-eb3ad065-20240822",
-    "react-dom": "19.0.0-rc-eb3ad065-20240822",
+    "react": "19.0.0-rc-e740d4b1-20240919",
+    "react-dom": "19.0.0-rc-e740d4b1-20240919",
     "react-error-boundary": "^4.0.13",
     "resend": "^4.0.0",
     "server-only": "^0.0.1",
@@ -60,7 +60,7 @@
     "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1",
     "drizzle-kit": "^0.24.0",
     "eslint": "^8",
-    "eslint-config-next": "15.0.0-canary.132",
+    "eslint-config-next": "15.0.0-canary.160",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-tailwindcss": "^3.17.0",
     "postcss": "^8",
@@ -78,9 +78,9 @@
     },
     "peerDependencyRules": {
       "allowedVersions": {
-        "next": "15.0.0-canary.132",
-        "react": "19.0.0-rc-eb3ad065-20240822",
-        "react-dom": "19.0.0-rc-eb3ad065-20240822"
+        "next": "15.0.0-canary.160",
+        "react": "19.0.0-rc-e740d4b1-20240919",
+        "react-dom": "19.0.0-rc-e740d4b1-20240919"
       },
       "allowAny": [
         "@types/react",
