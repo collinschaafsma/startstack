@@ -24,18 +24,22 @@ export const analytic = {
       status: "active",
       created: { lte: timestamp },
       expand: ["data.plan"],
+      limit: 100,
     })
 
     const mrr = subscriptions.data.reduce((acc, subscription) => {
-      const plan = subscription.items.data[0].plan as Stripe.Plan
-      if (plan.interval === "month") {
-        return acc + (plan.amount ?? 0)
-      } else if (plan.interval === "year") {
-        return acc + (plan.amount ?? 0) / 12
-      }
+      subscription.items.data.forEach(item => {
+        const plan = item.plan as Stripe.Plan
+        if (plan.interval === "month") {
+          acc += plan.amount ?? 0
+        } else if (plan.interval === "year") {
+          acc += (plan.amount ?? 0) / 12
+        }
+      })
       return acc
     }, 0)
 
-    return Math.round(mrr / 100)
+    // convert from cents to dollars with 2 decimal places
+    return Number((mrr / 100).toFixed(2))
   },
 }
