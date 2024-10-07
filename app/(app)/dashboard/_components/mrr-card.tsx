@@ -26,8 +26,8 @@ async function composeMRRData(): Promise<MRRData> {
   const previousMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1)
 
   const [currentMRR, previousMRR] = await Promise.all([
-    analytic.mrr(currentMonthStart.getTime() / 1000),
-    analytic.mrr(previousMonthStart.getTime() / 1000),
+    analytic.mrr(currentMonthStart),
+    analytic.mrr(previousMonthStart),
   ])
 
   const percentageChange = ((currentMRR - previousMRR) / previousMRR) * 100

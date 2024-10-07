@@ -1,5 +1,4 @@
-import Stripe from "stripe"
-import { stripe } from "@/lib/stripe"
+import { subscription } from "./subscription"
 
 /**
  * Analytic Service
@@ -12,30 +11,24 @@ export const analytic = {
   /**
    * Calculate MRR
    *
-   * This function calculates the MRR based on the provided timestamp.
+   * This function calculates the MRR based on the provided date.
    * It fetches active subscriptions and calculates the total revenue.
    *
-   * @param {number} timestamp - The timestamp to calculate MRR for.
+   * @param {Date} sinceDate - The date to calculate MRR for.
    * @returns {Promise<number>} - The calculated MRR.
    * @link https://docs.stripe.com/api/subscriptions/list
    */
-  async mrr(timestamp: number) {
-    const subscriptions = await stripe.subscriptions.list({
-      status: "active",
-      created: { lte: timestamp },
-      expand: ["data.plan"],
-      limit: 100,
+  async mrr(sinceDate: Date) {
+    const subscriptions = await subscription.list({
+      sinceDate,
     })
 
-    const mrr = subscriptions.data.reduce((acc, subscription) => {
-      subscription.items.data.forEach(item => {
-        const plan = item.plan as Stripe.Plan
-        if (plan.interval === "month") {
-          acc += plan.amount ?? 0
-        } else if (plan.interval === "year") {
-          acc += (plan.amount ?? 0) / 12
-        }
-      })
+    const mrr = subscriptions.reduce((acc, subscription) => {
+      if (subscription.price.interval === "month") {
+        acc += subscription.price.unitAmount ?? 0
+      } else if (subscription.price.interval === "year") {
+        acc += (subscription.price.unitAmount ?? 0) / 12
+      }
       return acc
     }, 0)
 
