@@ -41,6 +41,7 @@ export const subscription = {
    **/
   async update({ subscriptionId }: { subscriptionId: string }) {
     try {
+      // retrieve the subscription from stripe to ensure we have the latest data
       const subscription = await stripe.subscriptions.retrieve(subscriptionId)
 
       const reshapedSubscription = {
