@@ -14,6 +14,24 @@ import { stripe } from "@/lib/stripe"
  **/
 export const subscription = {
   /**
+   * List
+   *
+   * This function is used to list all active subscriptions since a given date.
+   *
+   * @param {Date} sinceDate - The date to list subscriptions since.
+   * @returns {Promise<Subscription[]>} - A promise that resolves to an array of subscriptions.
+   **/
+  async list({ sinceDate = new Date() }: { sinceDate: Date }) {
+    return await db.query.subscriptions.findMany({
+      where: (subscription, { gte, eq }) =>
+        gte(subscription.created, sinceDate) &&
+        eq(subscription.status, "active"),
+      with: {
+        price: true,
+      },
+    })
+  },
+  /**
    * Update
    *
    * This function is used to update a subscription by its ID.
