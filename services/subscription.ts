@@ -34,7 +34,7 @@ export const subscription = {
   /**
    * Update
    *
-   * This function is used to update a subscription by its ID.
+   * This function is used to update a subscription by its ID based on the latest data from Stripe.
    *
    * @param {string} subscriptionId - The ID of the subscription to update.
    * @returns {Promise<void>} - This function does not return anything.
