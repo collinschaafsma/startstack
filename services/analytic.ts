@@ -35,4 +35,50 @@ export const analytic = {
     // convert from cents to dollars with 2 decimal places
     return Number((mrr / 100).toFixed(2))
   },
+  /**
+   * MRR Chart
+   *
+   * This function calculates the MRR Growth chart data since a given date.
+   * It fetches active subscriptions and calculates the total mrr for each month.
+   *
+   * @param {Date} sinceDate - The date to calculate MRR Growth for.
+   * @returns {Promise<Array<{ month: string; mrr: number }>>} - The calculated MRR Growth chart data.
+   */
+  async mrrChart(sinceDate: Date) {
+    const subscriptions = await subscription.list({
+      sinceDate,
+    })
+
+    return subscriptions
+      .sort((a, b) => a.created.getTime() - b.created.getTime())
+      .reduce(
+        (acc, subscription) => {
+          const date = new Date(subscription.created)
+          const monthKey = new Date(0, Number(date.getMonth())).toLocaleString(
+            "default",
+            {
+              month: "short",
+            }
+          )
+
+          let monthlyAmount = (subscription.price.unitAmount ?? 0) / 100 // Convert cents to dollars
+          if (subscription.price.interval === "year") {
+            monthlyAmount /= 12 // Convert yearly to monthly
+          }
+          const previousMRR = acc[acc.length - 1]?.mrr ?? 0
+          const newMRR = previousMRR + monthlyAmount
+
+          const existingIndex = acc.findIndex(item => item.month === monthKey)
+
+          if (existingIndex !== -1) {
+            acc[existingIndex].mrr = Number(newMRR.toFixed(2))
+          } else {
+            acc.push({ month: monthKey, mrr: Number(newMRR.toFixed(2)) })
+          }
+
+          return acc
+        },
+        [] as Array<{ month: string; mrr: number }>
+      )
+  },
 }
