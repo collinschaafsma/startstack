@@ -21,10 +21,18 @@ export const subscription = {
    * @param {Date} sinceDate - The date to list subscriptions since.
    * @returns {Promise<Subscription[]>} - A promise that resolves to an array of subscriptions.
    **/
-  async list({ sinceDate = new Date() }: { sinceDate: Date }) {
+  async list({
+    sinceDate = new Date(),
+    // default to one year from now
+    untilDate = new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
+  }: {
+    sinceDate: Date
+    untilDate?: Date
+  }) {
     return await db.query.subscriptions.findMany({
-      where: (subscription, { gte, eq }) =>
+      where: (subscription, { gte, eq, lte }) =>
         gte(subscription.created, sinceDate) &&
+        lte(subscription.created, untilDate) &&
         eq(subscription.status, "active"),
       with: {
         price: true,
