@@ -1,4 +1,5 @@
 import "server-only"
+import { cache } from "react"
 import { eq } from "drizzle-orm"
 import { db } from "@/drizzle/db"
 import { subscriptions, SubscriptionStatus } from "@/drizzle/schema"
@@ -22,26 +23,28 @@ export const subscription = {
    * @param {Date} to - The date to list subscriptions to.
    * @returns {Promise<Subscription[]>} - A promise that resolves to an array of subscriptions.
    **/
-  async list({
-    // default to a year ago
-    from = new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
-    // default to now
-    to = new Date(),
-  }: {
-    from: Date
-    to?: Date
-  }) {
-    return await db.query.subscriptions.findMany({
-      where: (subscription, { eq, and, between }) =>
-        and(
-          between(subscription.created, from, to),
-          eq(subscription.status, "active")
-        ),
-      with: {
-        price: true,
-      },
-    })
-  },
+  list: cache(
+    async ({
+      // default to a year ago
+      from = new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
+      // default to now
+      to = new Date(),
+    }: {
+      from: Date
+      to?: Date
+    }) => {
+      return await db.query.subscriptions.findMany({
+        where: (subscription, { eq, and, between }) =>
+          and(
+            between(subscription.created, from, to),
+            eq(subscription.status, "active")
+          ),
+        with: {
+          price: true,
+        },
+      })
+    }
+  ),
   /**
    * Update
    *
