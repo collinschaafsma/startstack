@@ -26,7 +26,12 @@ export function MRRChartCard({ className }: { className?: string }) {
       <CardContent className="pl-2">
         <ErrorBoundary fallback={<MRRChartErrorFallback />}>
           <Suspense fallback={<MRRChartSkeleton />}>
-            <MRRChart data={analytic.mrrChart(new Date())} />
+            <MRRChart
+              data={analytic.mrrGrowth({
+                from: new Date(1978, 0, 1),
+                to: new Date(),
+              })}
+            />
           </Suspense>
         </ErrorBoundary>
       </CardContent>

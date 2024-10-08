@@ -18,10 +18,8 @@ export const analytic = {
    * @returns {Promise<number>} - The calculated MRR.
    * @link https://docs.stripe.com/api/subscriptions/list
    */
-  async mrr(sinceDate: Date) {
-    const subscriptions = await subscription.list({
-      sinceDate,
-    })
+  async mrr(range: { from: Date; to: Date }) {
+    const subscriptions = await subscription.list(range)
 
     const mrr = subscriptions.reduce((acc, subscription) => {
       if (subscription.price.interval === "month") {
@@ -36,18 +34,16 @@ export const analytic = {
     return Number((mrr / 100).toFixed(2))
   },
   /**
-   * MRR Chart
+   * MRR Growth
    *
-   * This function calculates the MRR Growth chart data since a given date.
+   * This function calculates the MRR Growth monthly.
    * It fetches active subscriptions and calculates the total mrr for each month.
    *
    * @param {Date} sinceDate - The date to calculate MRR Growth for.
    * @returns {Promise<Array<{ month: string; mrr: number }>>} - The calculated MRR Growth chart data.
    */
-  async mrrChart(sinceDate: Date) {
-    const subscriptions = await subscription.list({
-      sinceDate,
-    })
+  async mrrGrowth(range: { from: Date; to: Date }) {
+    const subscriptions = await subscription.list(range)
 
     return subscriptions
       .sort((a, b) => a.created.getTime() - b.created.getTime())

@@ -22,12 +22,21 @@ interface MRRData {
  */
 async function composeMRRData(): Promise<MRRData> {
   const now = new Date()
-  const currentMonthStart = new Date(now.getFullYear(), now.getMonth(), 1)
-  const previousMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1)
+
+  // from jan 1 to now
+  const currentMonthRange = {
+    from: new Date(now.getFullYear(), 0, 1),
+    to: now,
+  }
+  // from jan 1 to end of last month
+  const previousMonthRange = {
+    from: new Date(now.getFullYear(), 0, 1),
+    to: new Date(now.getFullYear(), now.getMonth() - 1, 31),
+  }
 
   const [currentMRR, previousMRR] = await Promise.all([
-    analytic.mrr(currentMonthStart),
-    analytic.mrr(previousMonthStart),
+    analytic.mrr(currentMonthRange),
+    analytic.mrr(previousMonthRange),
   ])
 
   const percentageChange = ((currentMRR - previousMRR) / previousMRR) * 100

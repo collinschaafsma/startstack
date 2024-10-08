@@ -16,24 +16,27 @@ export const subscription = {
   /**
    * List
    *
-   * This function is used to list all active subscriptions since a given date.
+   * This function is used to list all active subscriptions in a given date range.
    *
-   * @param {Date} sinceDate - The date to list subscriptions since.
+   * @param {Date} from - The date to list subscriptions from.
+   * @param {Date} to - The date to list subscriptions to.
    * @returns {Promise<Subscription[]>} - A promise that resolves to an array of subscriptions.
    **/
   async list({
-    sinceDate = new Date(),
-    // default to one year from now
-    untilDate = new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
+    // default to a year ago
+    from = new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
+    // default to now
+    to = new Date(),
   }: {
-    sinceDate: Date
-    untilDate?: Date
+    from: Date
+    to?: Date
   }) {
     return await db.query.subscriptions.findMany({
-      where: (subscription, { gte, eq, lte }) =>
-        gte(subscription.created, sinceDate) &&
-        lte(subscription.created, untilDate) &&
-        eq(subscription.status, "active"),
+      where: (subscription, { eq, and, between }) =>
+        and(
+          between(subscription.created, from, to),
+          eq(subscription.status, "active")
+        ),
       with: {
         price: true,
       },
