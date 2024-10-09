@@ -1,3 +1,4 @@
+import { unstable_cache as ioCache } from "next/cache"
 import { subscription } from "./subscription"
 
 /**
@@ -77,4 +78,62 @@ export const analytic = {
         [] as Array<{ month: string; mrr: number }>
       )
   },
+  /**
+   * Page Views
+   *
+   * This function calculates the page views for the dashboard.
+   * It fetches the page views from a posthog insight and returns the data.
+   *
+   * @returns {Promise<Array<{ month: string; pageViews: number }>>} - The calculated page views chart data.
+   */
+  pageViews: ioCache(
+    async (range: { from: Date; to: Date }) => {
+      if (
+        !process.env.NEXT_PUBLIC_POSTHOG_PROJECT_ID ||
+        !process.env.NEXT_PUBLIC_POSTHOG_PERSONAL_KEY
+      ) {
+        return []
+      }
+
+      const trendsParams = new URLSearchParams()
+      trendsParams.append(
+        "events",
+        JSON.stringify([
+          {
+            id: "$pageview",
+            math: "dau",
+          },
+        ])
+      )
+      trendsParams.append("display", "ActionsLineGraph")
+      trendsParams.append("date_to", range.to.toISOString())
+      trendsParams.append("date_from", range.from.toISOString())
+
+      const projectId = process.env.NEXT_PUBLIC_POSTHOG_PROJECT_ID
+      const trendsUrl = `https://us.posthog.com/api/projects/${projectId}/insights/trend?${trendsParams}`
+
+      const trendsRequest = await fetch(trendsUrl, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_POSTHOG_PERSONAL_KEY}`,
+        },
+      })
+      const trendsResponse = await trendsRequest.json()
+
+      const dataPoints = trendsResponse.result[0].data
+      const labels = trendsResponse.result[0].labels
+
+      return dataPoints.map((point: number, index: number) => {
+        return {
+          date: labels[index],
+          pageViews: point,
+        }
+      })
+    },
+    ["pageViews"],
+    {
+      revalidate: 8 * 60 * 60, // 8 hours
+    }
+  ),
 }

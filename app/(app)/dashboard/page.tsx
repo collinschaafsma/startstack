@@ -10,7 +10,7 @@ import { GrossCard } from "./_components/gross-card"
 import { MRRCard } from "./_components/mrr-card"
 import { MRRChartCard } from "./_components/mrr-chart-card"
 import { NetCard } from "./_components/net-card"
-import { PageViewChart } from "./_components/page-view-chart"
+import { PageViewChartCard } from "./_components/page-view-chart-card"
 import { RecentCustomersCard } from "./_components/recent-customers-card"
 import { RecentTransactionsCard } from "./_components/recent-transactions-card"
 
@@ -39,7 +39,7 @@ export default function DashboardPage() {
           <NetCard />
           <CustomersCard />
           <MRRChartCard className="md:col-span-2" />
-          <PageViewChart className="md:col-span-2" />
+          <PageViewChartCard className="md:col-span-2" />
           <RecentTransactionsCard className="md:col-span-2" />
           <RecentCustomersCard className="md:col-span-2" />
         </div>
