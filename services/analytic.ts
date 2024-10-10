@@ -140,12 +140,12 @@ export const analytic = {
     }
   ),
   /**
-   * Newsletter Contacts
+   * Newsletter Contacts Count
    *
-   * This function calculates the newsletter contacts for the dashboard.
+   * This function calculates the newsletter contacts count for the dashboard.
    * It fetches the newsletter contacts from a resend audience and returns the data.
    *
-   * @returns {Promise<number>} - The calculated newsletter contacts.
+   * @returns {Promise<number>} - The calculated newsletter contacts count.
    */
   newsletterContacts: ioCache(
     async (range: { from: Date; to: Date }) => {
