@@ -9,7 +9,7 @@ import { CustomersCard } from "./_components/customers-card"
 import { GrossCard } from "./_components/gross-card"
 import { MRRCard } from "./_components/mrr-card"
 import { MRRChartCard } from "./_components/mrr-chart-card"
-import { NetCard } from "./_components/net-card"
+import { NewsletterContactsCard } from "./_components/newsletter-contacts-card"
 import { PageViewChartCard } from "./_components/page-view-chart-card"
 import { RecentCustomersCard } from "./_components/recent-customers-card"
 import { RecentTransactionsCard } from "./_components/recent-transactions-card"
@@ -36,8 +36,8 @@ export default function DashboardPage() {
         <div className="grid gap-4 md:max-w-screen-xl md:grid-cols-4">
           <MRRCard />
           <GrossCard />
-          <NetCard />
           <CustomersCard />
+          <NewsletterContactsCard />
           <MRRChartCard className="md:col-span-2" />
           <PageViewChartCard className="md:col-span-2" />
           <RecentTransactionsCard className="md:col-span-2" />
