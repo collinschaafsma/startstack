@@ -9,11 +9,11 @@ import {
 } from "@/components/ui/chart"
 
 export function MRRChart({
-  data,
+  dataPromise,
 }: {
-  data: Promise<{ month: string; mrr: number }[]>
+  dataPromise: Promise<{ month: string; mrr: number }[]>
 }) {
-  const mrrData = use(data)
+  const mrrData = use(dataPromise)
 
   return (
     <ChartContainer

@@ -9,11 +9,11 @@ import {
 } from "@/components/ui/chart"
 
 export function PageViewChart({
-  data,
+  dataPromise,
 }: {
-  data: Promise<{ date: string; pageViews: number }[]>
+  dataPromise: Promise<{ date: string; pageViews: number }[]>
 }) {
-  const pageViewsData = use(data)
+  const pageViewsData = use(dataPromise)
 
   return (
     <ChartContainer

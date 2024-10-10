@@ -58,7 +58,7 @@ export function PageViewChartCard({ className }: { className?: string }) {
           <PosthogConfiguredBoundary>
             <Suspense fallback={<PageViewChartSkeleton />}>
               <PageViewChart
-                data={analytic.pageViews({
+                dataPromise={analytic.pageViews({
                   // 14 days ago
                   from: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000),
                   to: new Date(),
