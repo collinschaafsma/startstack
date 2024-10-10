@@ -1,4 +1,4 @@
-import { ShoppingCart } from "lucide-react"
+import { Landmark } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 export function GrossCard() {
@@ -6,7 +6,7 @@ export function GrossCard() {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">Gross</CardTitle>
-        <ShoppingCart className="size-4 text-muted-foreground" />
+        <Landmark className="size-4 text-muted-foreground" />
       </CardHeader>
       <CardContent>
         <div className="text-2xl font-bold">$345,000</div>

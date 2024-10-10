@@ -1,5 +1,5 @@
 import { Suspense } from "react"
-import { DollarSign } from "lucide-react"
+import { Receipt } from "lucide-react"
 import { analytic } from "@/services/analytic"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -80,7 +80,7 @@ export function MRRCard() {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">MRR</CardTitle>
-        <DollarSign className="size-4 text-muted-foreground" />
+        <Receipt className="size-4 text-muted-foreground" />
       </CardHeader>
       <CardContent>
         <ErrorBoundary fallback={<MRRCardErrorFallback />}>
