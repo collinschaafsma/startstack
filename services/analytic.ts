@@ -1,4 +1,7 @@
 import { unstable_cache as ioCache } from "next/cache"
+import { ListContactsResponse, Resend } from "resend"
+import { resendAudienceId, resendEnabled } from "@/lib/constants"
+import { logger } from "@/lib/logger"
 import { subscription } from "./subscription"
 
 /**
@@ -134,6 +137,54 @@ export const analytic = {
     ["pageViews"],
     {
       revalidate: 8 * 60 * 60, // 8 hours
+    }
+  ),
+  /**
+   * Newsletter Contacts
+   *
+   * This function calculates the newsletter contacts for the dashboard.
+   * It fetches the newsletter contacts from a resend audience and returns the data.
+   *
+   * @returns {Promise<number>} - The calculated newsletter contacts.
+   */
+  newsletterContacts: ioCache(
+    async (range: { from: Date; to: Date }) => {
+      if (!resendEnabled || !resendAudienceId) {
+        logger.warn("Resend is not enabled")
+        return 0
+      }
+
+      const resend = new Resend(process.env.RESEND_API_KEY)
+      const contactsResponse: ListContactsResponse = await resend.contacts.list(
+        {
+          audienceId: resendAudienceId,
+        }
+      )
+
+      if (contactsResponse.error) {
+        logger.error(
+          "Error fetching newsletter contacts",
+          contactsResponse.error
+        )
+        return 0
+      }
+
+      const contacts = contactsResponse.data?.data
+
+      if (!contacts) {
+        return 0
+      }
+
+      return contacts.filter(
+        contact =>
+          contact.unsubscribed === false &&
+          contact.created_at >= range.from.toISOString() &&
+          contact.created_at <= range.to.toISOString()
+      ).length
+    },
+    ["newsletterContacts"],
+    {
+      revalidate: 1 * 60 * 60, // 1 hour
     }
   ),
 }
