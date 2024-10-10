@@ -1,6 +1,10 @@
+import { Suspense } from "react"
 import { Mail } from "lucide-react"
 import { analytic } from "@/services/analytic"
+import { resendAudienceId, resendEnabled } from "@/lib/constants"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Skeleton } from "@/components/ui/skeleton"
+import { ErrorBoundary } from "@/components/error-boundary"
 
 interface NewsletterContactsData {
   current: number
@@ -37,9 +41,43 @@ async function composeNewsletterContactsData(): Promise<NewsletterContactsData> 
   }
 }
 
-export async function NewsletterContactsCard() {
+async function LoadNewsletterContactsCard() {
   const data = await composeNewsletterContactsData()
 
+  return (
+    <>
+      <div className="text-2xl font-bold">{data.current}</div>
+      <p className="text-xs text-muted-foreground">
+        {data.percentageChange >= 0 ? "+" : ""}
+        {data.percentageChange.toFixed(1)}% from last month
+      </p>
+    </>
+  )
+}
+
+function NewsletterContactsCardSkeleton() {
+  return (
+    <>
+      <Skeleton className="h-7 w-20" />
+      <Skeleton className="mt-2 h-3 w-40" />
+    </>
+  )
+}
+
+function NewsletterContactsCardErrorFallback() {
+  return (
+    <div className="text-red-500">Error loading Newsletter Contact Count</div>
+  )
+}
+
+function ResendConfiguredBoundary({ children }: { children: React.ReactNode }) {
+  if (!resendEnabled || !resendAudienceId) {
+    return <div className="text-red-500">Resend not configured</div>
+  }
+  return <>{children}</>
+}
+
+export function NewsletterContactsCard() {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -49,11 +87,13 @@ export async function NewsletterContactsCard() {
         <Mail className="size-4 text-muted-foreground" />
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-bold">{data.current}</div>
-        <p className="text-xs text-muted-foreground">
-          {data.percentageChange >= 0 ? "+" : ""}
-          {data.percentageChange.toFixed(1)}% from last month
-        </p>
+        <ErrorBoundary fallback={<NewsletterContactsCardErrorFallback />}>
+          <ResendConfiguredBoundary>
+            <Suspense fallback={<NewsletterContactsCardSkeleton />}>
+              <LoadNewsletterContactsCard />
+            </Suspense>
+          </ResendConfiguredBoundary>
+        </ErrorBoundary>
       </CardContent>
     </Card>
   )
