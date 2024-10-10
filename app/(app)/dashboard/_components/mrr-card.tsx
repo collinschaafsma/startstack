@@ -34,55 +34,48 @@ async function composeMRRData(): Promise<MRRData> {
     to: new Date(now.getFullYear(), now.getMonth() - 1, 31),
   }
 
-  const [currentMRR, previousMRR] = await Promise.all([
+  const [current, previous] = await Promise.all([
     analytic.mrr(currentMonthRange),
     analytic.mrr(previousMonthRange),
   ])
 
-  const percentageChange = ((currentMRR - previousMRR) / previousMRR) * 100
+  const percentageChange = ((current - previous) / previous) * 100
 
   return {
-    current: currentMRR,
-    previous: previousMRR,
-    percentageChange: percentageChange,
+    current,
+    previous,
+    percentageChange,
   }
 }
 
 export async function LoadMRRCard() {
   const mrrData = await composeMRRData()
+
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">MRR</CardTitle>
-        <DollarSign className="size-4 text-muted-foreground" />
-      </CardHeader>
-      <CardContent>
-        <div className="text-2xl font-bold">${mrrData.current}</div>
-        <p className="text-xs text-muted-foreground">
-          {mrrData.percentageChange >= 0 ? "+" : ""}
-          {mrrData.percentageChange.toFixed(1)}% from last month
-        </p>
-      </CardContent>
-    </Card>
+    <>
+      <div className="text-2xl font-bold">${mrrData.current}</div>
+      <p className="text-xs text-muted-foreground">
+        {mrrData.percentageChange >= 0 ? "+" : ""}
+        {mrrData.percentageChange.toFixed(1)}% from last month
+      </p>
+    </>
   )
 }
 
 function MRRCardSkeleton() {
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">MRR</CardTitle>
-        <DollarSign className="size-4 text-muted-foreground" />
-      </CardHeader>
-      <CardContent>
-        <Skeleton className="h-7 w-20" />
-        <Skeleton className="mt-2 h-3 w-40" />
-      </CardContent>
-    </Card>
+    <>
+      <Skeleton className="h-7 w-20" />
+      <Skeleton className="mt-2 h-3 w-40" />
+    </>
   )
 }
 
 function MRRCardErrorFallback() {
+  return <div className="text-red-500">Error loading MRR</div>
+}
+
+export function MRRCard() {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -90,18 +83,12 @@ function MRRCardErrorFallback() {
         <DollarSign className="size-4 text-muted-foreground" />
       </CardHeader>
       <CardContent>
-        <div className="text-red-500">Error loading MRR</div>
+        <ErrorBoundary fallback={<MRRCardErrorFallback />}>
+          <Suspense fallback={<MRRCardSkeleton />}>
+            <LoadMRRCard />
+          </Suspense>
+        </ErrorBoundary>
       </CardContent>
     </Card>
-  )
-}
-
-export function MRRCard() {
-  return (
-    <ErrorBoundary fallback={<MRRCardErrorFallback />}>
-      <Suspense fallback={<MRRCardSkeleton />}>
-        <LoadMRRCard />
-      </Suspense>
-    </ErrorBoundary>
   )
 }
