@@ -2,6 +2,7 @@ import { unstable_cache as ioCache } from "next/cache"
 import { ListContactsResponse, Resend } from "resend"
 import { resendAudienceId, resendEnabled } from "@/lib/constants"
 import { logger } from "@/lib/logger"
+import { invoice } from "./invoice"
 import { subscription } from "./subscription"
 
 /**
@@ -187,4 +188,21 @@ export const analytic = {
       revalidate: 1 * 60 * 60, // 1 hour
     }
   ),
+  /**
+   * Gross
+   *
+   * This function calculates the gross for the dashboard.
+   * It fetches the gross from a stripe invoice and returns the data.
+   *
+   * @returns {Promise<number>} - The calculated gross.
+   */
+  async gross(range: { from: Date; to: Date }) {
+    const invoices = await invoice.list(range)
+    const gross = invoices.reduce((acc, invoice) => {
+      return acc + invoice.amountPaid
+    }, 0)
+
+    // convert from cents to dollars with 2 decimal places
+    return Number((gross / 100).toFixed(2))
+  },
 }
