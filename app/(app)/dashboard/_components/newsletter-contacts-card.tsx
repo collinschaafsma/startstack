@@ -12,6 +12,16 @@ interface NewsletterContactsData {
   percentageChange: number
 }
 
+/**
+ * Compose Newsletter Contacts Data
+ *
+ * This function fetches the current and previous month's newsletter contacts data.
+ * It calculates the current newsletter contacts by calling the analytic.newsletterContacts method with the current month's start timestamp.
+ * It calculates the previous newsletter contacts by calling the analytic.newsletterContacts method with the previous month's start timestamp.
+ * It then calculates the percentage change between the current and previous newsletter contacts.
+ *
+ * @returns {Promise<NewsletterContactsData>} - The newsletter contacts data for the current and previous month.
+ */
 async function composeNewsletterContactsData(): Promise<NewsletterContactsData> {
   const now = new Date()
 
