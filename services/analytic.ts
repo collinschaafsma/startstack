@@ -2,6 +2,7 @@ import { unstable_cache as ioCache } from "next/cache"
 import { ListContactsResponse, Resend } from "resend"
 import { resendAudienceId, resendEnabled } from "@/lib/constants"
 import { logger } from "@/lib/logger"
+import { customer } from "./customer"
 import { invoice } from "./invoice"
 import { subscription } from "./subscription"
 
@@ -204,5 +205,15 @@ export const analytic = {
 
     // convert from cents to dollars with 2 decimal places
     return Number((gross / 100).toFixed(2))
+  },
+  /**
+   * Customer Count
+   *
+   * This function calculates the customer count for the dashboard.
+   *
+   * @returns {Promise<number>} - The calculated customer count.
+   */
+  async customerCount(range: { from: Date; to: Date }) {
+    return (await customer.count(range))[0].count
   },
 }
