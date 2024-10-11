@@ -257,6 +257,7 @@ export const customers = pgTable(
       .notNull()
       .references(() => users.id),
     stripeCustomerId: text("stripeCustomerId").notNull(), // stripe id (cus_123)
+    created: timestamp("created", { mode: "date" }).notNull().defaultNow(),
   },
   customer => ({
     compositePK: primaryKey({

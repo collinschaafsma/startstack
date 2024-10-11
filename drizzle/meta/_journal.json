@@ -8,6 +8,13 @@
       "when": 1725305496709,
       "tag": "0000_watery_doctor_strange",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1728652883077,
+      "tag": "0001_gifted_hex",
+      "breakpoints": true
     }
   ]
 }
