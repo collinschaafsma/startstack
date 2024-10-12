@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/table"
 import { ErrorBoundary } from "@/components/error-boundary"
 
-async function LoadRecentCustomersCard() {
+async function LoadRecentCustomers() {
   const recentCustomers = await customer.list({
     range: { from: new Date(1978, 0, 1), to: new Date() },
     limit: 5,
@@ -47,7 +47,7 @@ async function LoadRecentCustomersCard() {
   )
 }
 
-function RecentCustomersCardSkeleton() {
+function RecentCustomersSkeleton() {
   return (
     <TableRow>
       <TableCell colSpan={2}>
@@ -57,7 +57,7 @@ function RecentCustomersCardSkeleton() {
   )
 }
 
-function RecentCustomersCardErrorFallback() {
+function RecentCustomersErrorFallback() {
   return (
     <TableRow>
       <TableCell colSpan={2}>
@@ -112,9 +112,9 @@ export function RecentCustomersCard({ className }: { className?: string }) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            <ErrorBoundary fallback={<RecentCustomersCardErrorFallback />}>
-              <Suspense fallback={<RecentCustomersCardSkeleton />}>
-                <LoadRecentCustomersCard />
+            <ErrorBoundary fallback={<RecentCustomersErrorFallback />}>
+              <Suspense fallback={<RecentCustomersSkeleton />}>
+                <LoadRecentCustomers />
               </Suspense>
             </ErrorBoundary>
           </TableBody>
