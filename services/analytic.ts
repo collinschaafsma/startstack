@@ -1,3 +1,4 @@
+import { cache } from "react"
 import { unstable_cache as ioCache } from "next/cache"
 import { and, between, count, eq } from "drizzle-orm"
 import { ListContactsResponse, Resend } from "resend"
@@ -51,7 +52,7 @@ export const analytic = {
    * @param {Date} sinceDate - The date to calculate MRR Growth for.
    * @returns {Promise<Array<{ month: string; mrr: number }>>} - The calculated MRR Growth chart data.
    */
-  async mrrGrowth(range: { from: Date; to: Date }) {
+  mrrGrowth: cache(async (range: { from: Date; to: Date }) => {
     const subscriptions = await subscription.list(range)
 
     return subscriptions
@@ -85,7 +86,7 @@ export const analytic = {
         },
         [] as Array<{ month: string; mrr: number }>
       )
-  },
+  }),
   /**
    * Page Views
    *
@@ -200,7 +201,7 @@ export const analytic = {
    *
    * @returns {Promise<number>} - The calculated gross.
    */
-  async gross(range: { from: Date; to: Date }) {
+  gross: cache(async (range: { from: Date; to: Date }) => {
     const invoices = await invoice.list({ range })
     const gross = invoices.reduce((acc, invoice) => {
       return acc + invoice.amountPaid
@@ -208,7 +209,7 @@ export const analytic = {
 
     // convert from cents to dollars with 2 decimal places
     return Number((gross / 100).toFixed(2))
-  },
+  }),
   /**
    * Customer Count
    *
@@ -226,7 +227,7 @@ export const analytic = {
    *
    * @returns {Promise<number>} - The calculated sales count.
    */
-  async salesCount(range: { from: Date; to: Date }) {
+  salesCount: cache(async (range: { from: Date; to: Date }) => {
     return (
       await db
         .select({ count: count() })
@@ -239,5 +240,5 @@ export const analytic = {
           )
         )
     )[0].count
-  },
+  }),
 }
