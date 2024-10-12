@@ -142,15 +142,22 @@ export const invoice = {
    **/
   list: cache(
     async ({
-      from = new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
-      to = new Date(),
+      range,
+      limit = 10,
     }: {
-      from: Date
-      to?: Date
+      range: { from: Date; to: Date }
+      limit?: number
     }) => {
       const invoices = await db.query.invoices.findMany({
         where: (invoice, { eq, and, between }) =>
-          and(between(invoice.created, from, to), eq(invoice.status, "paid")),
+          and(
+            between(invoice.created, range.from, range.to),
+            eq(invoice.status, "paid")
+          ),
+        limit,
+        with: {
+          user: true,
+        },
       })
       return invoices
     }
