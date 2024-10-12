@@ -13,13 +13,20 @@ export const customer = {
    *
    * This function lists customers within a given date range.
    */
-  list: async (range: { from: Date; to: Date }) => {
+  list: async ({
+    range,
+    limit = 10,
+  }: {
+    range: { from: Date; to: Date }
+    limit?: number
+  }) => {
     return await db.query.customers.findMany({
       where: (customer, { between }) =>
         between(customer.created, range.from, range.to),
       with: {
         user: true,
       },
+      limit,
     })
   },
   /**

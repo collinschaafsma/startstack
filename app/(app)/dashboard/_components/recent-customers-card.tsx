@@ -1,3 +1,6 @@
+import { Suspense } from "react"
+import { analytic } from "@/services/analytic"
+import { customer } from "@/services/customer"
 import {
   Card,
   CardContent,
@@ -5,6 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { Skeleton } from "@/components/ui/skeleton"
 import {
   Table,
   TableBody,
@@ -13,41 +17,91 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { ErrorBoundary } from "@/components/error-boundary"
+
+async function LoadRecentCustomersCard() {
+  const recentCustomers = await customer.list({
+    range: { from: new Date(1978, 0, 1), to: new Date() },
+    limit: 5,
+  })
+
+  if (recentCustomers.length === 0) {
+    return (
+      <TableRow>
+        <TableCell colSpan={2}>No customers found</TableCell>
+      </TableRow>
+    )
+  }
+
+  return (
+    <>
+      {recentCustomers.map(customer => (
+        <TableRow key={customer.userId}>
+          <TableCell className="font-medium">{customer.user.email}</TableCell>
+          <TableCell className="text-right">
+            {customer.created.toLocaleDateString()}
+          </TableCell>
+        </TableRow>
+      ))}
+    </>
+  )
+}
+
+function RecentCustomersCardSkeleton() {
+  return (
+    <TableRow>
+      <TableCell colSpan={2}>
+        <Skeleton className="h-6 w-full" />
+      </TableCell>
+    </TableRow>
+  )
+}
+
+function RecentCustomersCardErrorFallback() {
+  return (
+    <TableRow>
+      <TableCell colSpan={2}>
+        <div className="text-red-500">Failed to load recent customers</div>
+      </TableCell>
+    </TableRow>
+  )
+}
+
+async function GainedCustomersThisMonth() {
+  const [customerCount, customerCountThisMonth] = await Promise.all([
+    analytic.customerCount({
+      from: new Date(1978, 0, 1),
+      to: new Date(),
+    }),
+    analytic.customerCount({
+      from: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+      to: new Date(),
+    }),
+  ])
+
+  return (
+    <>
+      You gained {customerCount - customerCountThisMonth} customers this month.
+    </>
+  )
+}
+
+function GainedCustomersThisMonthSkeleton() {
+  return <>You gained 0 customers this month.</>
+}
 
 export function RecentCustomersCard({ className }: { className?: string }) {
-  const recentCustomers = [
-    {
-      id: 1,
-      email: "johndoe@example.com",
-      createdAt: new Date(),
-    },
-    {
-      id: 2,
-      email: "janedoe@example.com",
-      createdAt: new Date(),
-    },
-    {
-      id: 3,
-      email: "jimsmith@example.com",
-      createdAt: new Date(),
-    },
-    {
-      id: 4,
-      email: "jilljones@example.com",
-      createdAt: new Date(),
-    },
-    {
-      id: 5,
-      email: "mikebrown@example.com",
-      createdAt: new Date(),
-    },
-  ]
-
   return (
     <Card className={className}>
       <CardHeader>
         <CardTitle>Recent Customers</CardTitle>
-        <CardDescription>You gained 265 customers this month.</CardDescription>
+        <CardDescription>
+          <ErrorBoundary fallback={null}>
+            <Suspense fallback={<GainedCustomersThisMonthSkeleton />}>
+              <GainedCustomersThisMonth />
+            </Suspense>
+          </ErrorBoundary>
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <Table>
@@ -58,14 +112,11 @@ export function RecentCustomersCard({ className }: { className?: string }) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {recentCustomers.map(customer => (
-              <TableRow key={customer.id}>
-                <TableCell className="font-medium">{customer.email}</TableCell>
-                <TableCell className="text-right">
-                  {customer.createdAt.toLocaleDateString()}
-                </TableCell>
-              </TableRow>
-            ))}
+            <ErrorBoundary fallback={<RecentCustomersCardErrorFallback />}>
+              <Suspense fallback={<RecentCustomersCardSkeleton />}>
+                <LoadRecentCustomersCard />
+              </Suspense>
+            </ErrorBoundary>
           </TableBody>
         </Table>
       </CardContent>
