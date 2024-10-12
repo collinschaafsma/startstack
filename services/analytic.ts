@@ -1,5 +1,8 @@
 import { unstable_cache as ioCache } from "next/cache"
+import { and, between, count, eq } from "drizzle-orm"
 import { ListContactsResponse, Resend } from "resend"
+import { db } from "@/drizzle/db"
+import { checkoutSessions } from "@/drizzle/schema"
 import { resendAudienceId, resendEnabled } from "@/lib/constants"
 import { logger } from "@/lib/logger"
 import { customer } from "./customer"
@@ -198,7 +201,7 @@ export const analytic = {
    * @returns {Promise<number>} - The calculated gross.
    */
   async gross(range: { from: Date; to: Date }) {
-    const invoices = await invoice.list(range)
+    const invoices = await invoice.list({ range })
     const gross = invoices.reduce((acc, invoice) => {
       return acc + invoice.amountPaid
     }, 0)
@@ -215,5 +218,26 @@ export const analytic = {
    */
   async customerCount(range: { from: Date; to: Date }) {
     return (await customer.count(range))[0].count
+  },
+  /**
+   * Sales Count
+   *
+   * This function calculates the sales count for the dashboard.
+   *
+   * @returns {Promise<number>} - The calculated sales count.
+   */
+  async salesCount(range: { from: Date; to: Date }) {
+    return (
+      await db
+        .select({ count: count() })
+        .from(checkoutSessions)
+        .where(
+          and(
+            between(checkoutSessions.created, range.from, range.to),
+            eq(checkoutSessions.status, "complete"),
+            eq(checkoutSessions.paymentStatus, "paid")
+          )
+        )
+    )[0].count
   },
 }

@@ -1,3 +1,6 @@
+import { Suspense } from "react"
+import { analytic } from "@/services/analytic"
+import { invoice } from "@/services/invoice"
 import {
   Card,
   CardContent,
@@ -5,6 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { Skeleton } from "@/components/ui/skeleton"
 import {
   Table,
   TableBody,
@@ -13,26 +17,87 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { ErrorBoundary } from "@/components/error-boundary"
+
+async function LoadRecentTransactions() {
+  const recentTransactions = await invoice.list({
+    range: { from: new Date(1978, 0, 1), to: new Date() },
+    limit: 5,
+  })
+
+  if (recentTransactions.length === 0) {
+    return (
+      <TableRow>
+        <TableCell colSpan={2}>No transactions found</TableCell>
+      </TableRow>
+    )
+  }
+
+  return (
+    <>
+      {recentTransactions.map(transaction => (
+        <TableRow key={transaction.id}>
+          <TableCell className="font-medium">
+            {transaction.user.email}
+          </TableCell>
+          <TableCell>${transaction.amountPaid / 100}</TableCell>
+          <TableCell className="text-right">{transaction.status}</TableCell>
+        </TableRow>
+      ))}
+    </>
+  )
+}
+
+function RecentTransactionsSkeleton() {
+  return (
+    <TableRow>
+      <TableCell colSpan={2}>
+        <Skeleton className="h-6 w-full" />
+      </TableCell>
+    </TableRow>
+  )
+}
+
+function RecentTransactionsErrorFallback() {
+  return (
+    <TableRow>
+      <TableCell colSpan={2}>
+        <div className="text-red-500">Failed to load recent transactions</div>
+      </TableCell>
+    </TableRow>
+  )
+}
+
+async function SalesThisMonth() {
+  const salesCountThisMonth = await analytic.salesCount({
+    from: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+    to: new Date(),
+  })
+
+  return (
+    <>
+      You made {salesCountThisMonth}{" "}
+      {salesCountThisMonth === 1 ? "sale" : "sales"} this month.
+    </>
+  )
+}
+
+function SalesThisMonthSkeleton() {
+  return <>You made 0 sales this month.</>
+}
 
 export function RecentTransactionsCard({ className }: { className?: string }) {
-  const recentTransactions = [
-    { id: 1, email: "johndoe@example.com", amount: 1200, status: "Completed" },
-    { id: 2, email: "janedoe@example.com", amount: 850, status: "Pending" },
-    { id: 3, email: "jimsmith@example.com", amount: 2300, status: "Completed" },
-    { id: 4, email: "jilljones@example.com", amount: 1750, status: "Failed" },
-    {
-      id: 5,
-      email: "mikebrown@example.com",
-      amount: 3100,
-      status: "Completed",
-    },
-  ]
-
   return (
     <Card className={className}>
       <CardHeader>
         <CardTitle>Recent Transactions</CardTitle>
-        <CardDescription>You made 265 sales this month.</CardDescription>
+        <CardDescription>
+          <ErrorBoundary fallback={null}>
+            <Suspense fallback={<SalesThisMonthSkeleton />}>
+              <SalesThisMonth />
+            </Suspense>
+          </ErrorBoundary>
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <Table>
@@ -44,17 +109,11 @@ export function RecentTransactionsCard({ className }: { className?: string }) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {recentTransactions.map(transaction => (
-              <TableRow key={transaction.id}>
-                <TableCell className="font-medium">
-                  {transaction.email}
-                </TableCell>
-                <TableCell>${transaction.amount}</TableCell>
-                <TableCell className="text-right">
-                  {transaction.status}
-                </TableCell>
-              </TableRow>
-            ))}
+            <ErrorBoundary fallback={<RecentTransactionsErrorFallback />}>
+              <Suspense fallback={<RecentTransactionsSkeleton />}>
+                <LoadRecentTransactions />
+              </Suspense>
+            </ErrorBoundary>
           </TableBody>
         </Table>
       </CardContent>

@@ -380,6 +380,13 @@ export const invoices = pgTable("invoice", {
     .references(() => users.id),
 })
 
+export const invoicesRelations = relations(invoices, ({ one }) => ({
+  user: one(users, {
+    fields: [invoices.userId],
+    references: [users.id],
+  }),
+}))
+
 // Product types
 export type Product = InferSelectModel<typeof products>
 export type NewProduct = InferInsertModel<typeof products>
