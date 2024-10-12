@@ -37,7 +37,7 @@ async function LoadRecentTransactions() {
     <>
       {recentTransactions.map(transaction => (
         <TableRow key={transaction.id}>
-          <TableCell className="font-medium">
+          <TableCell className="hidden font-medium md:table-cell">
             {transaction.user.email}
           </TableCell>
           <TableCell>${transaction.amountPaid / 100}</TableCell>
@@ -103,7 +103,9 @@ export function RecentTransactionsCard({ className }: { className?: string }) {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[100px]">Customer</TableHead>
+              <TableHead className="hidden w-[100px] md:table-cell">
+                Customer
+              </TableHead>
               <TableHead>Amount</TableHead>
               <TableHead className="text-right">Status</TableHead>
             </TableRow>

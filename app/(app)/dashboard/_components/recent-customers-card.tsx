@@ -38,7 +38,7 @@ async function LoadRecentCustomers() {
       {recentCustomers.map(customer => (
         <TableRow key={customer.userId}>
           <TableCell className="font-medium">{customer.user.email}</TableCell>
-          <TableCell className="text-right">
+          <TableCell className="hidden text-right md:table-cell">
             {customer.created.toLocaleDateString()}
           </TableCell>
         </TableRow>
@@ -108,7 +108,9 @@ export function RecentCustomersCard({ className }: { className?: string }) {
           <TableHeader>
             <TableRow>
               <TableHead className="w-[100px]">Customer</TableHead>
-              <TableHead className="text-right">Created At</TableHead>
+              <TableHead className="hidden text-right md:table-cell">
+                Created At
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
