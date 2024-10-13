@@ -6,10 +6,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { PageViewChart } from "./page-view-chart"
 
-function PageViewChartSkeleton() {
-  return <Skeleton className="ml-4 h-[200px] w-[96%]" />
-}
-
 function PageViewChartErrorFallback() {
   return (
     <div className="flex items-center justify-center">
@@ -56,7 +52,9 @@ export function PageViewChartCard({ className }: { className?: string }) {
       <CardContent className="pl-2">
         <ErrorBoundary fallback={<PageViewChartErrorFallback />}>
           <PosthogConfiguredBoundary>
-            <Suspense fallback={<PageViewChartSkeleton />}>
+            <Suspense
+              fallback={<Skeleton className="ml-4 h-[200px] w-[96%]" />}
+            >
               <PageViewChart
                 dataPromise={analytic.pageViews({
                   // 14 days ago

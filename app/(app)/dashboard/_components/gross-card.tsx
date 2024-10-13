@@ -24,14 +24,14 @@ interface GrossData {
 async function composeGrossData(): Promise<GrossData> {
   const now = new Date()
 
-  // from 1978 to now
+  // from 2024 to now
   const currentMonthRange = {
-    from: new Date(1978, 0, 1),
+    from: new Date(2024, 0, 1),
     to: now,
   }
-  // from 1978 to end of last month
+  // from 2024 to end of last month
   const previousMonthRange = {
-    from: new Date(1978, 0, 1),
+    from: new Date(2024, 0, 1),
     to: new Date(now.getFullYear(), now.getMonth() - 1, 31),
   }
 

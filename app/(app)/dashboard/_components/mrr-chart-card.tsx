@@ -5,10 +5,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { MRRChart } from "./mrr-chart"
 
-function MRRChartSkeleton() {
-  return <Skeleton className="ml-4 h-[200px] w-[96%]" />
-}
-
 function MRRChartErrorFallback() {
   return (
     <div className="flex items-center justify-center">
@@ -25,10 +21,10 @@ export function MRRChartCard({ className }: { className?: string }) {
       </CardHeader>
       <CardContent className="pl-2">
         <ErrorBoundary fallback={<MRRChartErrorFallback />}>
-          <Suspense fallback={<MRRChartSkeleton />}>
+          <Suspense fallback={<Skeleton className="ml-4 h-[200px] w-[96%]" />}>
             <MRRChart
               dataPromise={analytic.mrrGrowth({
-                from: new Date(1978, 0, 1),
+                from: new Date(2024, 0, 1),
                 to: new Date(),
               })}
             />
