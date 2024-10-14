@@ -1,4 +1,5 @@
 import "server-only"
+import { cache } from "react"
 import { db } from "@/drizzle/db"
 import { Invoice, invoices } from "@/drizzle/schema"
 import { logger } from "@/lib/logger"
@@ -130,4 +131,35 @@ export const invoice = {
       logger.error("[invoice][upsert]", { error })
     }
   },
+  /**
+   * List
+   *
+   * This function is used to list invoices.
+   *
+   * @param {Date} from - The date to list invoices from.
+   * @param {Date} to - The date to list invoices to.
+   * @returns {Promise<Invoice[]>} - A promise that resolves to an array of invoices.
+   **/
+  list: cache(
+    async ({
+      range,
+      limit = 10,
+    }: {
+      range: { from: Date; to: Date }
+      limit?: number
+    }) => {
+      const invoices = await db.query.invoices.findMany({
+        where: (invoice, { eq, and, between }) =>
+          and(
+            between(invoice.created, range.from, range.to),
+            eq(invoice.status, "paid")
+          ),
+        limit,
+        with: {
+          user: true,
+        },
+      })
+      return invoices
+    }
+  ),
 }

@@ -46,6 +46,8 @@
     "react": "19.0.0-rc-e740d4b1-20240919",
     "react-dom": "19.0.0-rc-e740d4b1-20240919",
     "react-error-boundary": "^4.0.13",
+    "react-is": "19.0.0-rc-e740d4b1-20240919",
+    "recharts": "2.13.0-alpha.5",
     "resend": "^4.0.0",
     "server-only": "^0.0.1",
     "stripe": "^16.8.0",
@@ -74,7 +76,8 @@
     "overrides": {
       "@types/node": "^20.12.13",
       "@types/react": "npm:types-react@19.0.0-rc.1",
-      "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1"
+      "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1",
+      "react-is": "$react-is"
     },
     "peerDependencyRules": {
       "allowedVersions": {

@@ -1,4 +1,5 @@
 import "server-only"
+import { cache } from "react"
 import { eq } from "drizzle-orm"
 import { db } from "@/drizzle/db"
 import { subscriptions, SubscriptionStatus } from "@/drizzle/schema"
@@ -14,15 +15,47 @@ import { stripe } from "@/lib/stripe"
  **/
 export const subscription = {
   /**
+   * List
+   *
+   * This function is used to list all active subscriptions in a given date range.
+   *
+   * @param {Date} from - The date to list subscriptions from.
+   * @param {Date} to - The date to list subscriptions to.
+   * @returns {Promise<Subscription[]>} - A promise that resolves to an array of subscriptions.
+   **/
+  list: cache(
+    async ({
+      // default to a year ago
+      from = new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
+      // default to now
+      to = new Date(),
+    }: {
+      from: Date
+      to?: Date
+    }) => {
+      return await db.query.subscriptions.findMany({
+        where: (subscription, { eq, and, between }) =>
+          and(
+            between(subscription.created, from, to),
+            eq(subscription.status, "active")
+          ),
+        with: {
+          price: true,
+        },
+      })
+    }
+  ),
+  /**
    * Update
    *
-   * This function is used to update a subscription by its ID.
+   * This function is used to update a subscription by its ID based on the latest data from Stripe.
    *
    * @param {string} subscriptionId - The ID of the subscription to update.
    * @returns {Promise<void>} - This function does not return anything.
    **/
   async update({ subscriptionId }: { subscriptionId: string }) {
     try {
+      // retrieve the subscription from stripe to ensure we have the latest data
       const subscription = await stripe.subscriptions.retrieve(subscriptionId)
 
       const reshapedSubscription = {

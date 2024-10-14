@@ -1,0 +1,1 @@
+ALTER TABLE "customer" ADD COLUMN "created" timestamp DEFAULT now() NOT NULL;

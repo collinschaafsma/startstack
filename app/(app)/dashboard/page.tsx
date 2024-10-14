@@ -5,6 +5,14 @@ import {
   BreadcrumbPage,
 } from "@/components/ui/breadcrumb"
 import { Header } from "../_components/header"
+import { CustomersCard } from "./_components/customers-card"
+import { GrossCard } from "./_components/gross-card"
+import { MRRCard } from "./_components/mrr-card"
+import { MRRChartCard } from "./_components/mrr-chart-card"
+import { NewsletterContactsCard } from "./_components/newsletter-contacts-card"
+import { PageViewChartCard } from "./_components/page-view-chart-card"
+import { RecentCustomersCard } from "./_components/recent-customers-card"
+import { RecentTransactionsCard } from "./_components/recent-transactions-card"
 
 export const metadata = {
   title: "Dashboard",
@@ -14,20 +22,27 @@ export default function DashboardPage() {
   return (
     <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
       <Header>
-        <Breadcrumb className="hidden md:flex">
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbPage>Dashboard</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
+        <>
+          <Breadcrumb className="hidden md:flex">
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbPage>Dashboard</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+        </>
       </Header>
-      <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
-        <p>
-          Your dashboard page here. Note that only a user with the admin role
-          can access this page. Take a look at <code>middleware.ts</code> to see
-          how this is enforced. Dashboard example coming soon.
-        </p>
+      <main className="flex-1 p-6 md:p-4 md:py-0">
+        <div className="grid gap-4 md:max-w-screen-xl md:grid-cols-4">
+          <MRRCard />
+          <GrossCard />
+          <CustomersCard />
+          <NewsletterContactsCard />
+          <MRRChartCard className="md:col-span-2" />
+          <PageViewChartCard className="md:col-span-2" />
+          <RecentTransactionsCard className="md:col-span-2" />
+          <RecentCustomersCard className="md:col-span-2" />
+        </div>
       </main>
     </div>
   )

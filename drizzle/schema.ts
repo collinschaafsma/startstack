@@ -257,6 +257,7 @@ export const customers = pgTable(
       .notNull()
       .references(() => users.id),
     stripeCustomerId: text("stripeCustomerId").notNull(), // stripe id (cus_123)
+    created: timestamp("created", { mode: "date" }).notNull().defaultNow(),
   },
   customer => ({
     compositePK: primaryKey({
@@ -378,6 +379,13 @@ export const invoices = pgTable("invoice", {
     .notNull()
     .references(() => users.id),
 })
+
+export const invoicesRelations = relations(invoices, ({ one }) => ({
+  user: one(users, {
+    fields: [invoices.userId],
+    references: [users.id],
+  }),
+}))
 
 // Product types
 export type Product = InferSelectModel<typeof products>
