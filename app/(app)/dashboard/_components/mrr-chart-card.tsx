@@ -21,7 +21,7 @@ export function MRRChartCard({ className }: { className?: string }) {
       </CardHeader>
       <CardContent className="pl-2">
         <ErrorBoundary fallback={<MRRChartErrorFallback />}>
-          <Suspense fallback={<Skeleton className="ml-4 h-[200px] w-[96%]" />}>
+          <Suspense fallback={<Skeleton className="ml-4 h-[336px] w-[96%]" />}>
             <MRRChart
               dataPromise={analytic.mrrGrowth({
                 from: new Date(2024, 0, 1),

@@ -53,7 +53,7 @@ export function PageViewChartCard({ className }: { className?: string }) {
         <ErrorBoundary fallback={<PageViewChartErrorFallback />}>
           <PosthogConfiguredBoundary>
             <Suspense
-              fallback={<Skeleton className="ml-4 h-[200px] w-[96%]" />}
+              fallback={<Skeleton className="ml-4 h-[336px] w-[96%]" />}
             >
               <PageViewChart
                 dataPromise={analytic.pageViews({
