@@ -14,11 +14,11 @@ interface CustomersData {
  * Compose customer count data
  *
  * This function fetches the current and previous month's customer count data.
- * It calculates the current customer count by calling the analytic.customerCount method with the current month's start timestamp.
- * It calculates the previous customer count by calling the analytic.customerCount method with the previous month's start timestamp.
+ * It calculates the current customer count by calling the analytic.customerCount method with the current month's start date.
+ * It calculates the previous customer count by calling the analytic.customerCount method with the previous month's start date.
  * It then calculates the percentage change between the current and previous customer counts.
  *
- * @returns {Promise<CustomersData>} - The customers data for the current and previous month.
+ * @returns {Promise<CustomersData>} - The customers data for the current, previous month, and the percentage change.
  */
 async function composeCustomersData(): Promise<CustomersData> {
   const now = new Date()
@@ -77,6 +77,7 @@ function CustomersCardErrorFallback() {
 
 export function CustomersCard() {
   composeCustomersData()
+
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

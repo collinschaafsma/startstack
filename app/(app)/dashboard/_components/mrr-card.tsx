@@ -14,11 +14,11 @@ interface MRRData {
  * Compose MRR data
  *
  * This function fetches the current and previous month's MRR data.
- * It calculates the current MRR by calling the analytic.mrr method with the current month's start timestamp.
- * It calculates the previous MRR by calling the analytic.mrr method with the previous month's start timestamp.
+ * It calculates the current MRR by calling the analytic.mrr method with the current month's start date.
+ * It calculates the previous MRR by calling the analytic.mrr method with the previous month's start date.
  * It then calculates the percentage change between the current and previous MRR.
  *
- * @returns {Promise<MRRData>} - The MRR data for the current and previous month.
+ * @returns {Promise<MRRData>} - The MRR data for the current, previous month, and the percentage change.
  */
 async function composeMRRData(): Promise<MRRData> {
   const now = new Date()

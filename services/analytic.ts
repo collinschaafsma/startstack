@@ -26,7 +26,6 @@ export const analytic = {
    *
    * @param {Date} sinceDate - The date to calculate MRR for.
    * @returns {Promise<number>} - The calculated MRR.
-   * @link https://docs.stripe.com/api/subscriptions/list
    */
   async mrr(range: { from: Date; to: Date }) {
     const subscriptions = await subscription.list(range)

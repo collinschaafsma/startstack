@@ -68,14 +68,15 @@ function RecentCustomersErrorFallback() {
 }
 
 async function GainedCustomersThisMonth() {
+  const now = new Date()
   const [customerCount, customerCountThisMonth] = await Promise.all([
     analytic.customerCount({
-      from: new Date(1978, 0, 1),
-      to: new Date(),
+      from: new Date(now.getFullYear(), 0, 1),
+      to: now,
     }),
     analytic.customerCount({
-      from: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
-      to: new Date(),
+      from: new Date(now.getFullYear(), now.getMonth(), 1),
+      to: now,
     }),
   ])
 

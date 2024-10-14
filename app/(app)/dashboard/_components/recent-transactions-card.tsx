@@ -20,8 +20,9 @@ import {
 import { ErrorBoundary } from "@/components/error-boundary"
 
 async function LoadRecentTransactions() {
+  const now = new Date()
   const recentTransactions = await invoice.list({
-    range: { from: new Date(2024, 0, 1), to: new Date() },
+    range: { from: new Date(now.getFullYear(), 0, 1), to: now },
     limit: 5,
   })
 

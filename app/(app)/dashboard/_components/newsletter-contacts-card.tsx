@@ -16,18 +16,18 @@ interface NewsletterContactsData {
  * Compose Newsletter Contacts Data
  *
  * This function fetches the current and previous month's newsletter contacts data.
- * It calculates the current newsletter contacts by calling the analytic.newsletterContacts method with the current month's start timestamp.
- * It calculates the previous newsletter contacts by calling the analytic.newsletterContacts method with the previous month's start timestamp.
+ * It calculates the current newsletter contacts by calling the analytic.newsletterContacts method with the current month's start date.
+ * It calculates the previous newsletter contacts by calling the analytic.newsletterContacts method with the previous month's start date.
  * It then calculates the percentage change between the current and previous newsletter contacts.
  *
- * @returns {Promise<NewsletterContactsData>} - The newsletter contacts data for the current and previous month.
+ * @returns {Promise<NewsletterContactsData>} - The newsletter contacts data for the current, previous month, and the percentage change.
  */
 async function composeNewsletterContactsData(): Promise<NewsletterContactsData> {
   const now = new Date()
 
-  // from 1978 to now
+  // from jan 1 to now
   const currentMonthRange = {
-    from: new Date(1978, 0, 1),
+    from: new Date(now.getFullYear(), 0, 1),
     to: now,
   }
 
@@ -84,6 +84,7 @@ function ResendConfiguredBoundary({ children }: { children: React.ReactNode }) {
   if (!resendEnabled || !resendAudienceId) {
     return <div className="text-red-500">Resend not configured</div>
   }
+
   return <>{children}</>
 }
 

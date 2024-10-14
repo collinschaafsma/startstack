@@ -15,23 +15,23 @@ interface GrossData {
  * Compose gross data
  *
  * This function fetches the current and previous month's gross data.
- * It calculates the current gross by calling the analytic.gross method with the current month's start timestamp.
- * It calculates the previous gross by calling the analytic.gross method with the previous month's start timestamp.
+ * It calculates the current gross by calling the analytic.gross method with the current month's start date.
+ * It calculates the previous gross by calling the analytic.gross method with the previous month's start date.
  * It then calculates the percentage change between the current and previous gross.
  *
- * @returns {Promise<GrossData>} - The gross data for the current and previous month.
+ * @returns {Promise<GrossData>} - The gross data for the current, previous month, and the percentage change.
  */
 async function composeGrossData(): Promise<GrossData> {
   const now = new Date()
 
-  // from 2024 to now
+  // from jan 1 to now
   const currentMonthRange = {
-    from: new Date(2024, 0, 1),
+    from: new Date(now.getFullYear(), 0, 1),
     to: now,
   }
-  // from 2024 to end of last month
+  // from jan 1 to end of last month
   const previousMonthRange = {
-    from: new Date(2024, 0, 1),
+    from: new Date(now.getFullYear(), 0, 1),
     to: new Date(now.getFullYear(), now.getMonth() - 1, 31),
   }
 
