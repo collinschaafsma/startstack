@@ -110,7 +110,7 @@ export const analytic = {
         JSON.stringify([
           {
             id: "$pageview",
-            math: "dau",
+            math: "total",
           },
         ])
       )
