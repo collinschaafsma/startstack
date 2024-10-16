@@ -26,7 +26,7 @@ export async function captureEvent(event: Event) {
 
   // If there is no distinctId, attempt to get one from the cookie.
   // If there is no cookie, getDistinctId will generate a new one using nanoid()
-  if (!event.distinctId) event.distinctId = getDistinctId()
+  if (!event.distinctId) event.distinctId = await getDistinctId()
 
   const postHog = postHogClient()
   if (!postHog) return

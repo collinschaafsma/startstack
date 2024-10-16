@@ -19,8 +19,8 @@ export function postHogClient() {
   })
 }
 
-export function getDistinctId() {
-  const cookie = cookies().get(
+export async function getDistinctId() {
+  const cookie = (await cookies()).get(
     `ph_${process.env.NEXT_PUBLIC_POSTHOG_KEY!}_posthog`
   )
   if (!cookie) return nanoid()
