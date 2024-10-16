@@ -10,12 +10,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { DesktopNav } from "./_components/nav"
 import { NavProvider } from "./_components/nav/provider"
 
-const PostHogPageView = dynamic(
-  () => import("@/components/post-hog-page-view"),
-  {
-    ssr: false,
-  }
-)
+const PostHogPageView = dynamic(() => import("@/components/post-hog-page-view"))
 
 const fontSans = FontSans({
   subsets: ["latin"],

@@ -8,12 +8,7 @@ import { cn } from "@/lib/utils"
 import { PostHogProvider } from "@/components/post-hog-provider"
 import { ThemeProvider } from "@/components/theme-provider"
 
-const PostHogPageView = dynamic(
-  () => import("@/components/post-hog-page-view"),
-  {
-    ssr: false,
-  }
-)
+const PostHogPageView = dynamic(() => import("@/components/post-hog-page-view"))
 
 const fontSans = FontSans({
   subsets: ["latin"],
