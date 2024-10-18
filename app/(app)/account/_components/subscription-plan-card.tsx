@@ -67,7 +67,7 @@ function NoSubscriptionPlan() {
       </CardContent>
       <CardFooter className="justify-end gap-2">
         <Button asChild>
-          <Link href="/#pricing">Subscribe To Support Plan</Link>
+          <Link href="/#pricing">Subscribe</Link>
         </Button>
       </CardFooter>
     </>
