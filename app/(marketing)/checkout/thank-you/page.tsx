@@ -7,12 +7,10 @@ import { logger } from "@/lib/logger"
 import { Button } from "@/components/ui/button"
 import { AuthBoundary } from "@/components/boundaries"
 
-export default async function ThankYouPage(
-  props: {
-    searchParams: Promise<{ id: string | undefined }>
-  }
-) {
-  const searchParams = await props.searchParams;
+export default async function ThankYouPage(props: {
+  searchParams: Promise<{ id: string | undefined }>
+}) {
+  const searchParams = await props.searchParams
   const checkoutResponse = await checkout.sessions.get({
     sessionId: searchParams.id as string,
   })
