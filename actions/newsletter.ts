@@ -16,6 +16,7 @@ import { z } from "zod"
 import { captureEvent } from "@/lib/capture-event"
 import { resendAudienceId, resendEnabled } from "@/lib/constants"
 import { logger } from "@/lib/logger"
+import { getDistinctId } from "@/lib/post-hog"
 
 const SubscribeToNewsletterSchema = z.object({
   email: z.string().email(),
@@ -49,8 +50,11 @@ export async function subscribeToNewsletter(email: string) {
     throw new Error(createContactResponse.error.message)
   }
 
+  // Get distinctId relies on cookies which are not supported in after
+  const distinctId = await getDistinctId()
   after(async () => {
     await captureEvent({
+      distinctId,
       event: "newsletter_signup",
       properties: { email, audienceId: resendAudienceId, status: "success" },
     })

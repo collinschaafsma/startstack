@@ -11,6 +11,7 @@ import { z } from "zod"
 import { providers, signIn, signOut } from "@/auth"
 import { captureEvent } from "@/lib/capture-event"
 import { logger } from "@/lib/logger"
+import { getDistinctId } from "@/lib/post-hog"
 
 const emailSchema = z.string().email()
 const EmailSignIn = z
@@ -73,8 +74,11 @@ export async function signInAction({
     redirectTo,
   })
 
+  // Get distinctId relies on cookies which are not supported in after
+  const distinctId = await getDistinctId()
   after(async () => {
     await captureEvent({
+      distinctId,
       event: `sign_in_via_${provider}`,
       properties: { email, status: "success" },
     })
@@ -120,8 +124,11 @@ export async function signUpAction({
     redirectTo,
   })
 
+  // Get distinctId relies on cookies which are not supported in after
+  const distinctId = await getDistinctId()
   after(async () => {
     await captureEvent({
+      distinctId,
       event: `sign_up_via_${provider}`,
       properties: { email, status: "success" },
     })
