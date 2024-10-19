@@ -14,12 +14,11 @@ export const metadata = {
   title: "Account",
 }
 
-export default async function AccountPage({
-  searchParams,
-}: {
-  searchParams: { page: string }
+export default async function AccountPage(props: {
+  searchParams: Promise<{ page: string }>
 }) {
-  const { page } = await searchParams
+  const searchParams = await props.searchParams
+  const { page } = searchParams
   const pageNumber: number = page ? parseInt(page) : 1
   // Preload data for the account page
   currentUser.paymentMethods({ limit: 1 })
