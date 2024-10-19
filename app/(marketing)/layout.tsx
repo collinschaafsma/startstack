@@ -18,12 +18,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { Footer } from "./_components/footer"
 import { Header } from "./_components/header"
 
-const PostHogPageView = dynamic(
-  () => import("@/components/post-hog-page-view"),
-  {
-    ssr: false,
-  }
-)
+const PostHogPageView = dynamic(() => import("@/components/post-hog-page-view"))
 
 const fontSans = FontSans({
   subsets: ["latin"],

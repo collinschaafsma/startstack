@@ -2,11 +2,10 @@ import { redirect } from "next/navigation"
 import { checkout } from "@/services/checkout"
 import { EmbeddedStripeForm } from "./_components/embedded-stripe-form"
 
-export default async function CheckoutPage({
-  searchParams,
-}: {
-  searchParams: { p: string }
+export default async function CheckoutPage(props: {
+  searchParams: Promise<{ p: string }>
 }) {
+  const searchParams = await props.searchParams
   const { p } = searchParams
 
   // create a checkout session

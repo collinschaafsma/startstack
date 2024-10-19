@@ -27,6 +27,7 @@ import {
   resendEnabled,
 } from "@/lib/constants"
 import { logger } from "@/lib/logger"
+import { getDistinctId } from "@/lib/post-hog"
 import { stripe } from "@/lib/stripe"
 import { currentUser } from "./currentUser"
 import { price } from "./price"
@@ -142,8 +143,10 @@ export const checkout = {
         })
 
         // capture the event in posthog
+        const distinctId = await getDistinctId()
         after(async () => {
           await captureEvent({
+            distinctId,
             event: "checkout_session_created",
             properties: {
               priceId,

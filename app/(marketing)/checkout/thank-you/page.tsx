@@ -4,14 +4,14 @@ import { checkout } from "@/services/checkout"
 import { captureEvent } from "@/lib/capture-event"
 import { appName } from "@/lib/constants"
 import { logger } from "@/lib/logger"
+import { getDistinctId } from "@/lib/post-hog"
 import { Button } from "@/components/ui/button"
 import { AuthBoundary } from "@/components/boundaries"
 
-export default async function ThankYouPage({
-  searchParams,
-}: {
-  searchParams: { id: string | undefined }
+export default async function ThankYouPage(props: {
+  searchParams: Promise<{ id: string | undefined }>
 }) {
+  const searchParams = await props.searchParams
   const checkoutResponse = await checkout.sessions.get({
     sessionId: searchParams.id as string,
   })
@@ -29,12 +29,14 @@ export default async function ThankYouPage({
   }
 
   // capture the event in posthog
+  const distinctId = await getDistinctId()
   after(async () => {
     if (
       checkoutResponse.status === "success" &&
       checkoutResponse.session.status === "complete"
     ) {
       await captureEvent({
+        distinctId,
         event: "checkout_session_completed",
         properties: {
           priceId: checkoutResponse.session.line_items?.data[0].price?.id,
