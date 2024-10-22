@@ -38,15 +38,15 @@
     "drizzle-orm": "^0.33.0",
     "lucide-react": "^0.436.0",
     "nanoid": "^5.0.7",
-    "next": "15.0.0-rc.1",
-    "next-auth": "5.0.0-beta.20",
+    "next": "15.0.0",
+    "next-auth": "5.0.0-beta.25",
     "next-themes": "^0.3.0",
     "posthog-js": "^1.161.5",
     "posthog-node": "^4.2.0",
-    "react": "19.0.0-rc-cd22717c-20241013",
-    "react-dom": "19.0.0-rc-cd22717c-20241013",
+    "react": "19.0.0-rc-65a56d0e-20241020",
+    "react-dom": "19.0.0-rc-65a56d0e-20241020",
     "react-error-boundary": "^4.0.13",
-    "react-is": "19.0.0-rc-cd22717c-20241013",
+    "react-is": "19.0.0-rc-65a56d0e-20241020",
     "recharts": "2.13.0-alpha.5",
     "resend": "^4.0.0",
     "server-only": "^0.0.1",
@@ -62,7 +62,7 @@
     "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1",
     "drizzle-kit": "^0.24.0",
     "eslint": "^9.12.0",
-    "eslint-config-next": "15.0.0-rc.1",
+    "eslint-config-next": "15.0.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-tailwindcss": "^3.17.0",
     "postcss": "^8",
@@ -81,9 +81,9 @@
     },
     "peerDependencyRules": {
       "allowedVersions": {
-        "next": "15.0.0-rc.1",
-        "react": "19.0.0-rc-cd22717c-20241013",
-        "react-dom": "19.0.0-rc-cd22717c-20241013"
+        "next": "15.0.0",
+        "react": "19.0.0-rc-65a56d0e-20241020",
+        "react-dom": "19.0.0-rc-65a56d0e-20241020"
       },
       "allowAny": [
         "@types/react",
