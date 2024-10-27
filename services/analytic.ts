@@ -203,7 +203,7 @@ export const analytic = {
   gross: cache(async (range: { from: Date; to: Date }) => {
     const invoices = await invoice.list({ range })
     const gross = invoices.reduce((acc, invoice) => {
-      return acc + invoice.amountPaid
+      return acc + invoice.amount_paid
     }, 0)
 
     // convert from cents to dollars with 2 decimal places
