@@ -1,5 +1,6 @@
 import "server-only"
 import { cache } from "react"
+import { unstable_cache as ioCache } from "next/cache"
 import { and, eq, inArray } from "drizzle-orm"
 import { Session } from "next-auth"
 import Stripe from "stripe"
@@ -168,22 +169,25 @@ const currentUserService: CurrentUserService = {
    * @param {number} page - The page number to get.
    * @returns {Promise<Invoice[]>} - The invoices for the user.
    */
-  invoices: cache(async ({ startingAfter, userId }: InvoiceParams) => {
-    const customerId = await currentUserService.customerId({ userId })
-    const invoices = await stripe.invoices.list({
-      customer: customerId || undefined,
-      limit: invoicesLimit,
-      starting_after: startingAfter,
-    })
+  invoices: ({ startingAfter, userId }: InvoiceParams) =>
+    // todo: use, use cache once available
+    ioCache(
+      async () => {
+        const customerId = await currentUserService.customerId({ userId })
+        const invoices = await stripe.invoices.list({
+          customer: customerId || undefined,
+          limit: invoicesLimit,
+          starting_after: startingAfter,
+        })
 
-    return invoices.data
-    // return await db.query.invoices.findMany({
-    //   where: (invoices, { eq }) => eq(invoices.userId, userId),
-    //   orderBy: (invoices, { desc }) => desc(invoices.created),
-    //   limit: invoicesLimit,
-    //   offset: (page - 1) * invoicesLimit,
-    // })
-  }),
+        return invoices.data
+      },
+      [userId],
+      {
+        tags: ["invoices", userId],
+        revalidate: 60 * 60 * 24, // 24 hours
+      }
+    )(),
   /**
    * PaymentMethods
    *
