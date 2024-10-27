@@ -1,7 +1,6 @@
 import "server-only"
 import Stripe from "stripe"
 import { checkout } from "./checkout"
-import { invoice } from "./invoice"
 import { paymentMethod } from "./paymentMethod"
 import { price } from "./price"
 import { product } from "./product"
@@ -14,7 +13,6 @@ import { subscription } from "./subscription"
  * - Checkout session completion
  * - Subscription updates and deletions
  * - Payment method attachments
- * - Invoice finalization and payments
  * - Product and price creation, updates, and deletions
  * @link https://docs.stripe.com/api/events
  **/
@@ -46,12 +44,6 @@ export const event = {
         const eventPaymentMethod = constructedEvent.data
           .object as Stripe.PaymentMethod
         await paymentMethod.attach({ paymentMethodId: eventPaymentMethod.id })
-        break
-      case "invoice.finalized":
-      case "invoice.paid":
-      case "invoice.created":
-        const eventInvoice = constructedEvent.data.object as Stripe.Invoice
-        await invoice.upsert({ invoiceId: eventInvoice.id })
         break
       case "product.created":
       case "product.updated":
