@@ -15,6 +15,13 @@
       "when": 1728652883077,
       "tag": "0001_gifted_hex",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1730053200053,
+      "tag": "0002_wealthy_talon",
+      "breakpoints": true
     }
   ]
 }
