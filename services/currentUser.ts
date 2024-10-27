@@ -2,12 +2,10 @@ import "server-only"
 import { cache } from "react"
 import { and, eq, inArray } from "drizzle-orm"
 import { Session } from "next-auth"
+import Stripe from "stripe"
 import { db } from "@/drizzle/db"
 import {
   checkoutSessions,
-  countAsNumber,
-  Invoice,
-  invoices,
   PaymentMethod,
   prices,
   products,
@@ -16,21 +14,21 @@ import {
 import { auth } from "@/auth"
 import { invoicesLimit } from "@/lib/constants"
 import { logger } from "@/lib/logger"
+import { stripe } from "@/lib/stripe"
 
 type PaginationParams = {
   page?: number
   limit?: number
 }
 
-type InvoiceParams = { page: number; userId: string }
+type InvoiceParams = { startingAfter: string; userId: string }
 type PaymentMethodParams = PaginationParams & { userId: string }
 type SubscriptionParams = PaginationParams & { userId: string }
 
 interface CurrentUserService {
   customerId: (params: { userId: string }) => Promise<string | null>
   subscriptionId: (params: { userId: string }) => Promise<string | null>
-  invoices: (params: InvoiceParams) => Promise<Invoice[]>
-  invoicesTotal: (params: { userId: string }) => Promise<number>
+  invoices: (params: InvoiceParams) => Promise<Stripe.Invoice[]>
   paymentMethods: (params: PaymentMethodParams) => Promise<PaymentMethod[]>
   subscriptions: (params: SubscriptionParams) => Promise<SubscriptionPrice[]>
   hasPurchasedProduct: (params: {
@@ -79,20 +77,6 @@ interface CurrentUser {
   invoices: (params: { page: number }) => Promise<
     Session["user"] & {
       invoices: Awaited<ReturnType<typeof currentUserService.invoices> | null>
-    }
-  >
-  /**
-   * InvoicesTotal
-   *
-   * This function is used to get the total number of invoices for a user.
-   *
-   * @returns {Promise<Session["user"] & {invoicesTotal: Awaited<ReturnType<typeof currentUserService.invoicesTotal> | null>}> - The total number of invoices for the user.
-   */
-  invoicesTotal: () => Promise<
-    Session["user"] & {
-      invoicesTotal: Awaited<ReturnType<
-        typeof currentUserService.invoicesTotal
-      > | null>
     }
   >
   /**
@@ -180,35 +164,25 @@ const currentUserService: CurrentUserService = {
    *
    * This function is used to get the invoices for a user.
    *
-   * @param {string} userId - The id of the user.
+   * @param {string} customerId - The id of the customer.
    * @param {number} page - The page number to get.
    * @returns {Promise<Invoice[]>} - The invoices for the user.
    */
-  invoices: cache(async ({ page = 1, userId }: InvoiceParams) => {
-    return await db.query.invoices.findMany({
-      where: (invoices, { eq }) => eq(invoices.userId, userId),
-      orderBy: (invoices, { desc }) => desc(invoices.created),
+  invoices: cache(async ({ startingAfter, userId }: InvoiceParams) => {
+    const customerId = await currentUserService.customerId({ userId })
+    const invoices = await stripe.invoices.list({
+      customer: customerId || undefined,
       limit: invoicesLimit,
-      offset: (page - 1) * invoicesLimit,
+      starting_after: startingAfter,
     })
-  }),
-  /**
-   * InvoicesTotal
-   *
-   * This function is used to get the total number of invoices for a user.
-   *
-   * @param {string} userId - The id of the user.
-   * @returns {Promise<number>} - The total number of invoices for the user.
-   */
-  invoicesTotal: cache(async ({ userId }: { userId: string }) => {
-    return (
-      (
-        await db
-          .select({ count: countAsNumber() })
-          .from(invoices)
-          .where(eq(invoices.userId, userId))
-      )[0].count ?? 0
-    )
+
+    return invoices.data
+    // return await db.query.invoices.findMany({
+    //   where: (invoices, { eq }) => eq(invoices.userId, userId),
+    //   orderBy: (invoices, { desc }) => desc(invoices.created),
+    //   limit: invoicesLimit,
+    //   offset: (page - 1) * invoicesLimit,
+    // })
   }),
   /**
    * PaymentMethods
