@@ -61,15 +61,15 @@ function NoPaymentMethod() {
 }
 
 async function LoadPaymentMethodCard() {
-  const user = await currentUser.paymentMethods({
+  const paymentMethods = await currentUser.paymentMethods({
     limit: 1,
   })
 
-  if (!user?.paymentMethods || user.paymentMethods.length === 0) {
+  if (!paymentMethods || paymentMethods.length === 0) {
     return <NoPaymentMethod />
   }
 
-  const { brand, expMonth, expYear, last4 } = user.paymentMethods[0]
+  const { brand, expMonth, expYear, last4 } = paymentMethods[0]
 
   return (
     <>
