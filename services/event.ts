@@ -1,5 +1,9 @@
 import "server-only"
+import { revalidateTag } from "next/cache"
+import { eq } from "drizzle-orm"
 import Stripe from "stripe"
+import { db } from "@/drizzle/db"
+import { customers } from "@/drizzle/schema"
 import { checkout } from "./checkout"
 import { paymentMethod } from "./paymentMethod"
 import { price } from "./price"
@@ -44,6 +48,19 @@ export const event = {
         const eventPaymentMethod = constructedEvent.data
           .object as Stripe.PaymentMethod
         await paymentMethod.attach({ paymentMethodId: eventPaymentMethod.id })
+        break
+      case "invoice.finalized":
+      case "invoice.paid":
+      case "invoice.created":
+        const eventInvoice = constructedEvent.data.object as Stripe.Invoice
+        const customerId = eventInvoice.customer as string
+        const customer = await db.query.customers.findFirst({
+          where: eq(customers.stripeCustomerId, customerId),
+        })
+
+        if (customer?.userId) {
+          revalidateTag(`invoices:${customer.userId}`)
+        }
         break
       case "product.created":
       case "product.updated":
