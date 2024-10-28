@@ -16,6 +16,7 @@ import { subscription } from "./subscription"
  * Handles Stripe webhook events for various operations:
  * - Checkout session completion
  * - Subscription updates and deletions
+ * - Invoice creation, finalization, and payment
  * - Payment method attachments
  * - Product and price creation, updates, and deletions
  * @link https://docs.stripe.com/api/events
