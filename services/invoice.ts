@@ -1,5 +1,5 @@
 import "server-only"
-import { cache } from "react"
+import { unstable_cache as ioCache } from "next/cache"
 import { stripe } from "@/lib/stripe"
 
 /**
@@ -18,24 +18,30 @@ export const invoice = {
    * @param {Date} to - The date to list invoices to.
    * @returns {Promise<Invoice[]>} - A promise that resolves to an array of invoices.
    **/
-  list: cache(
-    async ({
-      range,
-      limit = 10,
-    }: {
-      range: { from: Date; to: Date }
-      limit?: number
-    }) => {
-      const invoices = await stripe.invoices.list({
-        created: {
-          gte: Math.floor(range.from.getTime() / 1000),
-          lte: Math.floor(range.to.getTime() / 1000),
-        },
-        limit,
-        status: "paid",
-        expand: ["data.customer"],
-      })
-      return invoices.data
-    }
-  ),
+  list: ({
+    range,
+    limit = 10,
+  }: {
+    range: { from: Date; to: Date }
+    limit?: number
+  }) =>
+    ioCache(
+      async () => {
+        const invoices = await stripe.invoices.list({
+          created: {
+            gte: Math.floor(range.from.getTime() / 1000),
+            lte: Math.floor(range.to.getTime() / 1000),
+          },
+          limit,
+          status: "paid",
+          expand: ["data.customer"],
+        })
+        return invoices.data
+      },
+      ["invoices"],
+      {
+        tags: ["invoices"],
+        revalidate: 60 * 60 * 3, // 3 hours
+      }
+    )(),
 }
