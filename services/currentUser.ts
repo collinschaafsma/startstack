@@ -170,12 +170,15 @@ const currentUserService: CurrentUserService = {
    * @returns {Promise<Invoice[]>} - The invoices for the user.
    */
   invoices: ({ startingAfter, userId }: InvoiceParams) =>
-    // todo: use, use cache once available
     ioCache(
       async () => {
         const customerId = await currentUserService.customerId({ userId })
+        if (!customerId) {
+          return []
+        }
+
         const invoices = await stripe.invoices.list({
-          customer: customerId || undefined,
+          customer: customerId,
           limit: invoicesLimit,
           starting_after: startingAfter,
         })
@@ -184,8 +187,8 @@ const currentUserService: CurrentUserService = {
       },
       [userId],
       {
-        tags: ["invoices", userId],
-        revalidate: 60 * 60 * 24, // 24 hours
+        tags: ["invoices", `invoices:${userId}`],
+        revalidate: 60 * 60 * 24 * 30, // 30 days
       }
     )(),
   /**
