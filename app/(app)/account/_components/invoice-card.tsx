@@ -7,6 +7,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
@@ -21,6 +22,8 @@ import {
 } from "@/components/ui/table"
 import { ErrorBoundary } from "@/components/error-boundary"
 import { LinkExternal } from "@/components/link-external"
+import { Paginator } from "./paginator"
+import { PaginatorProvider } from "./paginator-provider"
 
 function InvoicesErrorFallback() {
   return (
@@ -49,10 +52,13 @@ function InvoicesSkeleton() {
   )
 }
 
-async function LoadInvoiceTableRows({ page }: Readonly<{ page: number }>) {
-  const user = await currentUser.invoices({ page })
+async function LoadInvoiceTableRows({
+  cursor,
+  direction,
+}: Readonly<{ cursor: string; direction: "forward" | "backward" }>) {
+  const invoices = await currentUser.invoices({ cursor, direction })
 
-  if (!user?.invoices || user.invoices.length === 0) {
+  if (!invoices || invoices.data.length === 0) {
     return (
       <TableBody>
         <TableRow>
@@ -66,7 +72,7 @@ async function LoadInvoiceTableRows({ page }: Readonly<{ page: number }>) {
 
   return (
     <TableBody>
-      {user.invoices.map(invoice => (
+      {invoices.data.map(invoice => (
         <TableRow key={invoice.id}>
           <TableCell>
             <LinkExternal
@@ -92,7 +98,11 @@ async function LoadInvoiceTableRows({ page }: Readonly<{ page: number }>) {
   )
 }
 
-export function InvoiceCard({ page }: Readonly<{ page: number }>) {
+export function InvoiceCard({
+  cursor,
+  direction,
+}: Readonly<{ cursor: string; direction: "forward" | "backward" }>) {
+  const invoicesPromise = currentUser.invoices({ cursor, direction })
   return (
     <Card className="w-full">
       <CardHeader>
@@ -111,11 +121,20 @@ export function InvoiceCard({ page }: Readonly<{ page: number }>) {
           </TableHeader>
           <ErrorBoundary fallback={<InvoicesErrorFallback />}>
             <Suspense fallback={<InvoicesSkeleton />}>
-              <LoadInvoiceTableRows page={page} />
+              <LoadInvoiceTableRows cursor={cursor} direction={direction} />
             </Suspense>
           </ErrorBoundary>
         </Table>
       </CardContent>
+      <CardFooter>
+        <ErrorBoundary fallback={null}>
+          <Suspense fallback={null}>
+            <PaginatorProvider responseToPaginatePromise={invoicesPromise}>
+              <Paginator />
+            </PaginatorProvider>
+          </Suspense>
+        </ErrorBoundary>
+      </CardFooter>
     </Card>
   )
 }
