@@ -15,14 +15,14 @@ export const metadata = {
 }
 
 export default async function AccountPage(props: {
-  searchParams: Promise<{ cursor: string; direction: "forward" | "backward" }>
+  searchParams: Promise<{ cursor: string }>
 }) {
   const searchParams = await props.searchParams
-  const { cursor, direction } = searchParams
+  const { cursor } = searchParams
   // Preload data for the account page
   currentUser.paymentMethods({ limit: 1 })
   currentUser.subscriptions({ limit: 1 })
-  currentUser.invoices({ cursor, direction: "forward" })
+  currentUser.invoices({ cursor })
 
   return (
     <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
@@ -40,7 +40,7 @@ export default async function AccountPage(props: {
           <PaymentMethodCard />
           <SubscriptionPlanCard />
           <div className="flex flex-col gap-4 md:col-span-2">
-            <InvoiceCard cursor={cursor} direction={direction} />
+            <InvoiceCard cursor={cursor} />
           </div>
         </div>
       </main>

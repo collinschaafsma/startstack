@@ -53,10 +53,11 @@ function InvoicesSkeleton() {
 }
 
 async function LoadInvoiceTableRows({
-  cursor,
-  direction,
-}: Readonly<{ cursor: string; direction: "forward" | "backward" }>) {
-  const invoices = await currentUser.invoices({ cursor, direction })
+  dataPromise,
+}: Readonly<{
+  dataPromise: Promise<Awaited<ReturnType<typeof currentUser.invoices>> | null>
+}>) {
+  const invoices = await dataPromise
 
   if (!invoices || invoices.data.length === 0) {
     return (
@@ -98,11 +99,8 @@ async function LoadInvoiceTableRows({
   )
 }
 
-export function InvoiceCard({
-  cursor,
-  direction,
-}: Readonly<{ cursor: string; direction: "forward" | "backward" }>) {
-  const invoicesPromise = currentUser.invoices({ cursor, direction })
+export function InvoiceCard({ cursor }: Readonly<{ cursor: string }>) {
+  const invoicesPromise = currentUser.invoices({ cursor })
   return (
     <Card className="w-full">
       <CardHeader>
@@ -121,7 +119,7 @@ export function InvoiceCard({
           </TableHeader>
           <ErrorBoundary fallback={<InvoicesErrorFallback />}>
             <Suspense fallback={<InvoicesSkeleton />}>
-              <LoadInvoiceTableRows cursor={cursor} direction={direction} />
+              <LoadInvoiceTableRows dataPromise={invoicesPromise} />
             </Suspense>
           </ErrorBoundary>
         </Table>
