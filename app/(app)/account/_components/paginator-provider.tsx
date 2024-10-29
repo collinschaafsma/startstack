@@ -1,7 +1,7 @@
 "use client"
 
-import { createContext, ReactNode, use } from "react"
-import { useSearchParams } from "next/navigation"
+import { createContext, ReactNode, use, useEffect, useState } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import Stripe from "stripe"
 
 interface GenericData {
@@ -12,8 +12,8 @@ export interface PaginatorContextInterface {
   showPaginator: boolean
   previousPageDisabled: boolean
   nextPageDisabled: boolean
-  nextPage: string | null
-  previousPage: string | null
+  handleNextPage: () => void
+  handlePrevPage: () => void
 }
 
 export const PaginatorContext = createContext<PaginatorContextInterface | null>(
@@ -28,16 +28,51 @@ export function PaginatorProvider<T extends GenericData>({
   responseToPaginatePromise: Promise<Stripe.Response<Stripe.ApiList<T>> | null>
 }>) {
   const responseToPaginate = use(responseToPaginatePromise)
+  const router = useRouter()
   const searchParams = useSearchParams()
+  const [hasMore, setHasMore] = useState(true)
+  const [prevCursors, setPrevCursors] = useState<string[]>([])
   const cursor = searchParams.get("cursor")
-  const direction = searchParams.get("direction")
 
-  const previousPageDisabled = !cursor
-  const nextPageDisabled = !responseToPaginate?.has_more
+  useEffect(() => {
+    if (cursor) {
+      setPrevCursors(prev => [...prev, cursor])
+    } else {
+      setPrevCursors([])
+    }
+
+    setHasMore(responseToPaginate?.has_more || false)
+  }, [cursor])
+
+  const handleNextPage = () => {
+    if (responseToPaginate?.data.length) {
+      const lastCustomerId =
+        responseToPaginate.data[responseToPaginate.data.length - 1].id
+      const params = new URLSearchParams(searchParams)
+      params.set("cursor", lastCustomerId)
+      router.push(`?${params.toString()}`)
+    }
+  }
+
+  const handlePrevPage = () => {
+    if (prevCursors.length > 0) {
+      const newPrevCursors = [...prevCursors]
+      const prevCursor = newPrevCursors.pop() // Remove the current cursor
+      setPrevCursors(newPrevCursors)
+
+      const params = new URLSearchParams(searchParams)
+      if (prevCursor && newPrevCursors.length > 0) {
+        params.set("cursor", newPrevCursors[newPrevCursors.length - 1])
+      } else {
+        params.delete("cursor")
+      }
+      router.push(`?${params.toString()}`)
+    }
+  }
+
+  const previousPageDisabled = prevCursors.length === 0
+  const nextPageDisabled = !hasMore
   const showPaginator = !previousPageDisabled && !nextPageDisabled
-  const nextPage = responseToPaginate?.data?.[0]?.id ?? null
-  const previousPage =
-    responseToPaginate?.data?.[responseToPaginate?.data?.length - 1]?.id ?? null
 
   return (
     <PaginatorContext.Provider
@@ -45,8 +80,8 @@ export function PaginatorProvider<T extends GenericData>({
         showPaginator,
         previousPageDisabled,
         nextPageDisabled,
-        nextPage,
-        previousPage,
+        handleNextPage,
+        handlePrevPage,
       }}
     >
       {children}
