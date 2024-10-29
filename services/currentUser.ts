@@ -24,7 +24,6 @@ type PaginationParams = {
 
 type InvoiceParams = {
   cursor: string
-  direction: "forward" | "backward"
   userId: string
 }
 type PaymentMethodParams = PaginationParams & { userId: string }
@@ -163,7 +162,7 @@ export const currentUserService: CurrentUserService = {
    * @param {string} startingAfter - The starting after object id for pagination.
    * @returns {Promise<Invoice[]>} - The invoices for the user.
    */
-  invoices: ({ cursor, direction, userId }: InvoiceParams) =>
+  invoices: ({ cursor, userId }: InvoiceParams) =>
     ioCache(
       async () => {
         const customerId = await currentUserService.customerId({ userId })
@@ -176,10 +175,8 @@ export const currentUserService: CurrentUserService = {
           limit: invoicesLimit,
         }
 
-        if (direction === "forward") {
+        if (cursor) {
           params.starting_after = cursor
-        } else {
-          params.ending_before = cursor
         }
 
         return await stripe.invoices.list(params)
