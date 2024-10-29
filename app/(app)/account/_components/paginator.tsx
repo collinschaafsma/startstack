@@ -7,6 +7,7 @@ import { usePaginator } from "./use-paginator"
 
 export function Paginator() {
   const {
+    showPaginator,
     previousPageDisabled,
     nextPageDisabled,
     handlePrevPage,
@@ -15,6 +16,8 @@ export function Paginator() {
     isPendingPrev,
     isPendingNext,
   } = usePaginator()
+
+  if (!showPaginator) return null
 
   return (
     <div className="flex w-full items-center justify-center space-x-2">
