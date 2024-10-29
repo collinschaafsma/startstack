@@ -59,7 +59,7 @@ async function LoadInvoiceTableRows({
 }>) {
   const invoices = await dataPromise
 
-  if (!invoices || invoices.data.length === 0) {
+  if (!invoices?.data || invoices.data.length === 0) {
     return (
       <TableBody>
         <TableRow>
