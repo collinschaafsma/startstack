@@ -141,4 +141,4 @@ export const supportedStripeEvents = new Set([
  *
  * This is the number of invoices to show.
  */
-export const invoicesLimit = 1
+export const invoicesLimit = 3
