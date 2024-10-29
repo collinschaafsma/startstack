@@ -64,8 +64,7 @@ async function LoadPaymentMethodCard() {
   const paymentMethods = await currentUser.paymentMethods({
     limit: 1,
   })
-
-  if (!paymentMethods || paymentMethods.length === 0) {
+  if (!paymentMethods || !paymentMethods?.[0]) {
     return <NoPaymentMethod />
   }
 

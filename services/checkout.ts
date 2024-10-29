@@ -55,7 +55,7 @@ export const checkout = {
     async create({ priceId }: { priceId: string }) {
       try {
         // 0. get the current user with the customer id if it exists
-        const customerId = (await currentUser.customerId())?.customerId
+        const customerId = await currentUser.customerId()
         const email = (await currentUser())?.email
 
         // 1. Make sure the price exists, and is active

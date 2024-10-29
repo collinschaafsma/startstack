@@ -34,7 +34,7 @@ interface CurrentUserService {
   subscriptionId: (params: { userId: string }) => Promise<string | null>
   invoices: (
     params: InvoiceParams
-  ) => Promise<Stripe.Response<Stripe.ApiList<Stripe.Invoice>> | null>
+  ) => Promise<{ data: Stripe.Invoice[]; hasMore: boolean } | null>
   paymentMethods: (params: PaymentMethodParams) => Promise<PaymentMethod[]>
   subscriptions: (params: SubscriptionParams) => Promise<SubscriptionPrice[]>
   hasPurchasedProduct: (params: {
@@ -59,7 +59,7 @@ interface CurrentUser {
    *
    * @returns {Promise<string | null>} - The customer id for the user.
    */
-  customerId: () => Promise<{ customerId: string | null } | null>
+  customerId: () => Promise<string | null>
   /**
    * SubscriptionId
    *
@@ -67,7 +67,7 @@ interface CurrentUser {
    *
    * @returns {Promise<string | null>} - The subscription id for the user.
    */
-  subscriptionId: () => Promise<{ subscriptionId: string | null } | null>
+  subscriptionId: () => Promise<string | null>
   /**
    * Invoices
    *
@@ -179,7 +179,11 @@ export const currentUserService: CurrentUserService = {
           params.starting_after = cursor
         }
 
-        return await stripe.invoices.list(params)
+        const invoices = await stripe.invoices.list(params)
+        return {
+          data: invoices.data,
+          hasMore: invoices.has_more,
+        }
       },
       [userId],
       {
@@ -301,7 +305,7 @@ const createCurrentUserServiceProxy = <T extends object>(
               augmentedArgs
             )
 
-            return { ...result }
+            return result
           }
         }
 
