@@ -9,7 +9,6 @@ import {
   useTransition,
 } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
-import Stripe from "stripe"
 
 interface GenericData {
   id: string
@@ -35,7 +34,7 @@ export function PaginatorProvider<T extends GenericData>({
   responseToPaginatePromise,
 }: Readonly<{
   children: ReactNode
-  responseToPaginatePromise: Promise<Stripe.Response<Stripe.ApiList<T>> | null>
+  responseToPaginatePromise: Promise<{ data: T[]; hasMore: boolean } | null>
 }>) {
   const responseToPaginate = use(responseToPaginatePromise)
   const router = useRouter()
@@ -54,7 +53,7 @@ export function PaginatorProvider<T extends GenericData>({
       setPrevCursors([])
     }
 
-    setHasMore(responseToPaginate?.has_more || false)
+    setHasMore(responseToPaginate?.hasMore || false)
   }, [cursor])
 
   const handleNextPage = () => {
