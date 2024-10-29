@@ -55,7 +55,8 @@ export const checkout = {
     async create({ priceId }: { priceId: string }) {
       try {
         // 0. get the current user with the customer id if it exists
-        const userWithCustomerId = await currentUser.customerId()
+        const customerId = (await currentUser.customerId())?.customerId
+        const email = (await currentUser())?.email
 
         // 1. Make sure the price exists, and is active
         const priceDetails = await price.get({ priceId })
@@ -69,7 +70,7 @@ export const checkout = {
 
         // 2.a if the mode is subscription, make sure we have a user, if not redirect to the sign in page
         // subscriptions require a currentUser
-        if (mode === "subscription" && !userWithCustomerId?.email) {
+        if (mode === "subscription" && !email) {
           return {
             status: "requiresSession",
             clientSecret: null,
@@ -79,23 +80,23 @@ export const checkout = {
         // 2.b check to see if the current user has a customerId, if not create a customer in stripe if mode is subscription
         let stripeCustomerId: string | undefined
         if (mode === "subscription") {
-          if (!userWithCustomerId?.customerId) {
+          if (!customerId) {
             // we should have a user by now, if not throw an error
-            if (!userWithCustomerId?.email) {
+            if (!email) {
               throw new Error("User with an email is required for subscription")
             }
 
             // create a new customer in stripe
             const customer = await stripe.customers.create({
-              email: userWithCustomerId.email,
+              email,
             })
 
             stripeCustomerId = customer.id // new customer id
           } else {
-            stripeCustomerId = userWithCustomerId.customerId // existing customer id
+            stripeCustomerId = customerId // existing customer id
           }
         } else {
-          stripeCustomerId = userWithCustomerId?.customerId ?? undefined // existing customer id if we have one
+          stripeCustomerId = customerId ?? undefined // existing customer id if we have one
         }
 
         // 3. Create a checkout session with stripe
