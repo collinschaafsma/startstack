@@ -1,6 +1,13 @@
 "use client"
 
-import { createContext, ReactNode, use, useEffect, useState } from "react"
+import {
+  createContext,
+  ReactNode,
+  use,
+  useEffect,
+  useState,
+  useTransition,
+} from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Stripe from "stripe"
 
@@ -14,6 +21,9 @@ export interface PaginatorContextInterface {
   nextPageDisabled: boolean
   handleNextPage: () => void
   handlePrevPage: () => void
+  isPending: boolean
+  isPendingNext: boolean
+  isPendingPrev: boolean
 }
 
 export const PaginatorContext = createContext<PaginatorContextInterface | null>(
@@ -32,6 +42,9 @@ export function PaginatorProvider<T extends GenericData>({
   const searchParams = useSearchParams()
   const [hasMore, setHasMore] = useState(true)
   const [prevCursors, setPrevCursors] = useState<string[]>([])
+  const [isPending, startTransition] = useTransition()
+  const [isPendingNext, setIsPendingNext] = useState(false)
+  const [isPendingPrev, setIsPendingPrev] = useState(false)
   const cursor = searchParams.get("cursor")
 
   useEffect(() => {
@@ -46,27 +59,35 @@ export function PaginatorProvider<T extends GenericData>({
 
   const handleNextPage = () => {
     if (responseToPaginate?.data.length) {
-      const lastCustomerId =
-        responseToPaginate.data[responseToPaginate.data.length - 1].id
-      const params = new URLSearchParams(searchParams)
-      params.set("cursor", lastCustomerId)
-      router.push(`?${params.toString()}`)
+      setIsPendingNext(true)
+      startTransition(() => {
+        const lastCustomerId =
+          responseToPaginate.data[responseToPaginate.data.length - 1].id
+        const params = new URLSearchParams(searchParams)
+        params.set("cursor", lastCustomerId)
+        router.push(`?${params.toString()}`)
+        setIsPendingNext(false)
+      })
     }
   }
 
   const handlePrevPage = () => {
     if (prevCursors.length > 0) {
-      const newPrevCursors = [...prevCursors]
-      const prevCursor = newPrevCursors.pop() // Remove the current cursor
-      setPrevCursors(newPrevCursors)
+      setIsPendingPrev(true)
+      startTransition(() => {
+        const newPrevCursors = [...prevCursors]
+        const prevCursor = newPrevCursors.pop() // Remove the current cursor
+        setPrevCursors(newPrevCursors)
 
-      const params = new URLSearchParams(searchParams)
-      if (prevCursor && newPrevCursors.length > 0) {
-        params.set("cursor", newPrevCursors[newPrevCursors.length - 1])
-      } else {
-        params.delete("cursor")
-      }
-      router.push(`?${params.toString()}`)
+        const params = new URLSearchParams(searchParams)
+        if (prevCursor && newPrevCursors.length > 0) {
+          params.set("cursor", newPrevCursors[newPrevCursors.length - 1])
+        } else {
+          params.delete("cursor")
+        }
+        router.push(`?${params.toString()}`)
+        setIsPendingPrev(false)
+      })
     }
   }
 
@@ -82,6 +103,9 @@ export function PaginatorProvider<T extends GenericData>({
         nextPageDisabled,
         handleNextPage,
         handlePrevPage,
+        isPending,
+        isPendingNext,
+        isPendingPrev,
       }}
     >
       {children}
