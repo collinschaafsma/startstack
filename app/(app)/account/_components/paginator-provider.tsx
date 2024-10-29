@@ -17,7 +17,7 @@ interface GenericData {
 
 export interface PaginatorContextInterface {
   showPaginator: boolean
-  previousPageDisabled: boolean
+  prevPageDisabled: boolean
   nextPageDisabled: boolean
   handleNextPage: () => void
   handlePrevPage: () => void
@@ -91,15 +91,15 @@ export function PaginatorProvider<T extends GenericData>({
     }
   }
 
-  const previousPageDisabled = prevCursors.length === 0
+  const prevPageDisabled = prevCursors.length === 0
   const nextPageDisabled = !hasMore
-  const showPaginator = !previousPageDisabled && !nextPageDisabled
+  const showPaginator = !prevPageDisabled && !nextPageDisabled
 
   return (
     <PaginatorContext.Provider
       value={{
         showPaginator,
-        previousPageDisabled,
+        prevPageDisabled,
         nextPageDisabled,
         handleNextPage,
         handlePrevPage,

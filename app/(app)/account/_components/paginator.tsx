@@ -8,7 +8,7 @@ import { usePaginator } from "./use-paginator"
 export function Paginator() {
   const {
     showPaginator,
-    previousPageDisabled,
+    prevPageDisabled,
     nextPageDisabled,
     handlePrevPage,
     handleNextPage,
@@ -23,11 +23,11 @@ export function Paginator() {
     <div className="flex w-full items-center justify-center space-x-2">
       <Button
         onClick={handlePrevPage}
-        disabled={previousPageDisabled || isPending}
+        disabled={prevPageDisabled || isPending}
         variant="outline"
         className={cn(
           "size-8 p-0",
-          previousPageDisabled && "bg-muted text-muted-foreground"
+          prevPageDisabled && "bg-muted text-muted-foreground"
         )}
       >
         <span className="sr-only">Go to previous page</span>
