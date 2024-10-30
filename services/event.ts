@@ -1,7 +1,10 @@
 import "server-only"
+import { revalidateTag } from "next/cache"
+import { eq } from "drizzle-orm"
 import Stripe from "stripe"
+import { db } from "@/drizzle/db"
+import { customers } from "@/drizzle/schema"
 import { checkout } from "./checkout"
-import { invoice } from "./invoice"
 import { paymentMethod } from "./paymentMethod"
 import { price } from "./price"
 import { product } from "./product"
@@ -13,8 +16,8 @@ import { subscription } from "./subscription"
  * Handles Stripe webhook events for various operations:
  * - Checkout session completion
  * - Subscription updates and deletions
+ * - Invoice creation, finalization, and payment
  * - Payment method attachments
- * - Invoice finalization and payments
  * - Product and price creation, updates, and deletions
  * @link https://docs.stripe.com/api/events
  **/
@@ -51,7 +54,14 @@ export const event = {
       case "invoice.paid":
       case "invoice.created":
         const eventInvoice = constructedEvent.data.object as Stripe.Invoice
-        await invoice.upsert({ invoiceId: eventInvoice.id })
+        const customerId = eventInvoice.customer as string
+        const customer = await db.query.customers.findFirst({
+          where: eq(customers.stripeCustomerId, customerId),
+        })
+
+        if (customer?.userId) {
+          revalidateTag(`invoices:${customer.userId}`)
+        }
         break
       case "product.created":
       case "product.updated":

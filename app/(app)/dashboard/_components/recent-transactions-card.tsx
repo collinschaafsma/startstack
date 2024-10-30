@@ -39,9 +39,9 @@ async function LoadRecentTransactions() {
       {recentTransactions.map(transaction => (
         <TableRow key={transaction.id}>
           <TableCell className="hidden font-medium md:table-cell">
-            {transaction.user.email}
+            {transaction.customer_email}
           </TableCell>
-          <TableCell>${transaction.amountPaid / 100}</TableCell>
+          <TableCell>${transaction.amount_paid / 100}</TableCell>
           <TableCell className="text-right">{transaction.status}</TableCell>
         </TableRow>
       ))}

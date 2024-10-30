@@ -116,16 +116,6 @@ export const paymentIntentStatusEnum = pgEnum(
   paymentIntentStatuses
 )
 
-const invoiceStatuses = [
-  "draft",
-  "open",
-  "paid",
-  "uncollectible",
-  "void",
-] as const
-export type InvoiceStatus = (typeof invoiceStatuses)[number]
-export const invoiceStatusEnum = pgEnum("invoiceStatus", invoiceStatuses)
-
 export const users = pgTable("user", {
   id: text("id")
     .primaryKey()
@@ -361,32 +351,6 @@ export const paymentMethods = pgTable("paymentMethod", {
     .references(() => users.id),
 })
 
-// see: https://docs.stripe.com/api/invoices/object
-export const invoices = pgTable("invoice", {
-  // stripe id (in_123)
-  id: text("id").primaryKey().notNull(),
-  amountDue: integer("amountDue").notNull(),
-  amountPaid: integer("amountPaid").notNull(),
-  amountRemaining: integer("amountRemaining").notNull(),
-  created: timestamp("created", { mode: "date" }).notNull().defaultNow(),
-  hostedInvoiceUrl: text("hostedInvoiceUrl"),
-  invoiceNumber: text("invoiceNumber"),
-  invoicePdf: text("invoicePdf"),
-  paymentIntentId: text("paymentIntentId").references(() => paymentIntents.id),
-  status: invoiceStatusEnum("status").notNull(),
-  subscriptionId: text("subscriptionId").references(() => subscriptions.id),
-  userId: text("userId")
-    .notNull()
-    .references(() => users.id),
-})
-
-export const invoicesRelations = relations(invoices, ({ one }) => ({
-  user: one(users, {
-    fields: [invoices.userId],
-    references: [users.id],
-  }),
-}))
-
 // Product types
 export type Product = InferSelectModel<typeof products>
 export type NewProduct = InferInsertModel<typeof products>
@@ -405,9 +369,6 @@ export type Subscription = InferSelectModel<typeof subscriptions>
 export type SubscriptionPrice = InferSelectModel<typeof subscriptions> & {
   price: Price
 }
-
-// Invoice types
-export type Invoice = InferSelectModel<typeof invoices>
 
 // Metadata types
 export type Metadata = {

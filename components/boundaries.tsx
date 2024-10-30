@@ -88,13 +88,13 @@ async function LoadSubscriptionCanceledBoundary({
   children: React.ReactNode
   alternate?: React.ReactNode | string
 }>) {
-  const user = await currentUser.subscriptions({ limit: 1 })
+  const subscriptions = await currentUser.subscriptions({ limit: 1 })
 
-  if (!user?.subscriptions || user.subscriptions.length === 0) {
+  if (!subscriptions || subscriptions.length === 0) {
     return null
   }
 
-  const { cancelAtPeriodEnd } = user.subscriptions[0]
+  const { cancelAtPeriodEnd } = subscriptions[0]
 
   if (cancelAtPeriodEnd) {
     return alternate ? <>{alternate}</> : null

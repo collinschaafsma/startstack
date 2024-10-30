@@ -75,12 +75,11 @@ function NoSubscriptionPlan() {
 }
 
 async function LoadSubscriptionPlanCard() {
-  const user = await currentUser.subscriptions({ limit: 1 })
-
-  if (!user?.subscriptions || user.subscriptions.length === 0) {
+  const subscriptions = await currentUser.subscriptions({ limit: 1 })
+  if (!subscriptions || !subscriptions?.[0]) {
     return <NoSubscriptionPlan />
   }
-  const { price, currentPeriodEnd, cancelAtPeriodEnd } = user.subscriptions[0]
+  const { price, currentPeriodEnd, cancelAtPeriodEnd } = subscriptions[0]
 
   return (
     <>

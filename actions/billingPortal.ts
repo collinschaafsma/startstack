@@ -21,15 +21,15 @@ import { logger } from "@/lib/logger"
 export async function updatePaymentMethodViaBillingPortal() {
   let url: string
   try {
-    const user = await currentUser.customerId()
-    if (!user?.customerId) {
+    const customerId = await currentUser.customerId()
+    if (!customerId) {
       throw new Error(
         "An error occurred while creating a billing portal session"
       )
     }
 
     url = await billingPortal.sessions.createURL({
-      customer: user.customerId,
+      customer: customerId,
       return_url: `${baseUrl}/account`,
       flow_data: {
         type: "payment_method_update",
@@ -52,24 +52,21 @@ export async function updatePaymentMethodViaBillingPortal() {
 export async function cancelSubscriptionViaBillingPortal() {
   let url: string
   try {
-    const userWithCustomerId = await currentUser.customerId()
-    const userWithSubscriptionId = await currentUser.subscriptionId()
-    if (
-      !userWithCustomerId?.customerId ||
-      !userWithSubscriptionId?.subscriptionId
-    ) {
+    const customerId = await currentUser.customerId()
+    const subscriptionId = await currentUser.subscriptionId()
+    if (!customerId || !subscriptionId) {
       throw new Error(
         "An error occurred while creating a billing portal session"
       )
     }
 
     url = await billingPortal.sessions.createURL({
-      customer: userWithCustomerId.customerId,
+      customer: customerId,
       return_url: `${baseUrl}/account`,
       flow_data: {
         type: "subscription_cancel",
         subscription_cancel: {
-          subscription: userWithSubscriptionId.subscriptionId,
+          subscription: subscriptionId,
         },
         after_completion: {
           type: "redirect",
@@ -90,24 +87,21 @@ export async function cancelSubscriptionViaBillingPortal() {
 export async function updateSubscriptionViaBillingPortal() {
   let url: string
   try {
-    const userWithCustomerId = await currentUser.customerId()
-    const userWithSubscriptionId = await currentUser.subscriptionId()
-    if (
-      !userWithCustomerId?.customerId ||
-      !userWithSubscriptionId?.subscriptionId
-    ) {
+    const customerId = await currentUser.customerId()
+    const subscriptionId = await currentUser.subscriptionId()
+    if (!customerId || !subscriptionId) {
       throw new Error(
         "An error occurred while creating a billing portal session"
       )
     }
 
     url = await billingPortal.sessions.createURL({
-      customer: userWithCustomerId.customerId,
+      customer: customerId,
       return_url: `${baseUrl}/account`,
       flow_data: {
         type: "subscription_update",
         subscription_update: {
-          subscription: userWithSubscriptionId.subscriptionId,
+          subscription: subscriptionId,
         },
         after_completion: {
           type: "redirect",

@@ -1,13 +1,12 @@
 import "server-only"
 import { cache } from "react"
+import { unstable_cache as ioCache } from "next/cache"
 import { and, eq, inArray } from "drizzle-orm"
 import { Session } from "next-auth"
+import Stripe from "stripe"
 import { db } from "@/drizzle/db"
 import {
   checkoutSessions,
-  countAsNumber,
-  Invoice,
-  invoices,
   PaymentMethod,
   prices,
   products,
@@ -16,21 +15,26 @@ import {
 import { auth } from "@/auth"
 import { invoicesLimit } from "@/lib/constants"
 import { logger } from "@/lib/logger"
+import { stripe } from "@/lib/stripe"
 
 type PaginationParams = {
   page?: number
   limit?: number
 }
 
-type InvoiceParams = { page: number; userId: string }
+type InvoiceParams = {
+  cursor: string
+  userId: string
+}
 type PaymentMethodParams = PaginationParams & { userId: string }
 type SubscriptionParams = PaginationParams & { userId: string }
 
 interface CurrentUserService {
   customerId: (params: { userId: string }) => Promise<string | null>
   subscriptionId: (params: { userId: string }) => Promise<string | null>
-  invoices: (params: InvoiceParams) => Promise<Invoice[]>
-  invoicesTotal: (params: { userId: string }) => Promise<number>
+  invoices: (
+    params: InvoiceParams
+  ) => Promise<{ data: Stripe.Invoice[]; hasMore: boolean } | null>
   paymentMethods: (params: PaymentMethodParams) => Promise<PaymentMethod[]>
   subscriptions: (params: SubscriptionParams) => Promise<SubscriptionPrice[]>
   hasPurchasedProduct: (params: {
@@ -55,9 +59,7 @@ interface CurrentUser {
    *
    * @returns {Promise<string | null>} - The customer id for the user.
    */
-  customerId: () => Promise<
-    (Session["user"] & { customerId: string | null }) | null
-  >
+  customerId: () => Promise<string | null>
   /**
    * SubscriptionId
    *
@@ -65,36 +67,18 @@ interface CurrentUser {
    *
    * @returns {Promise<string | null>} - The subscription id for the user.
    */
-  subscriptionId: () => Promise<
-    (Session["user"] & { subscriptionId: string | null }) | null
-  >
+  subscriptionId: () => Promise<string | null>
   /**
    * Invoices
    *
    * This function is used to get the invoices for a user.
    *
-   * @param {number} page - The page number to get.
-   * @returns {Promise<Session["user"] & {invoices: Awaited<ReturnType<typeof currentUserService.invoices> | null>}> - The invoices for the user.
+   * @param {string} startingAfter - The starting after object id for pagination.
+   * @returns {Promise<Awaited<ReturnType<typeof currentUserService.invoices>> | null>} - The invoices for the user.
    */
-  invoices: (params: { page: number }) => Promise<
-    Session["user"] & {
-      invoices: Awaited<ReturnType<typeof currentUserService.invoices> | null>
-    }
-  >
-  /**
-   * InvoicesTotal
-   *
-   * This function is used to get the total number of invoices for a user.
-   *
-   * @returns {Promise<Session["user"] & {invoicesTotal: Awaited<ReturnType<typeof currentUserService.invoicesTotal> | null>}> - The total number of invoices for the user.
-   */
-  invoicesTotal: () => Promise<
-    Session["user"] & {
-      invoicesTotal: Awaited<ReturnType<
-        typeof currentUserService.invoicesTotal
-      > | null>
-    }
-  >
+  invoices: (
+    params: Omit<InvoiceParams, "userId">
+  ) => Promise<Awaited<ReturnType<typeof currentUserService.invoices>> | null>
   /**
    * PaymentMethods
    *
@@ -102,15 +86,13 @@ interface CurrentUser {
    *
    * @param {number} page - The page number to get.
    * @param {number} limit - The number of payment methods to get.
-   * @returns {Promise<Session["user"] & {paymentMethods: Awaited<ReturnType<typeof currentUserService.paymentMethods> | null>} - The payment methods for the user.
+   * @returns {Promise<Awaited<ReturnType<typeof currentUserService.paymentMethods>> | null>} - The payment methods for the user.
    */
-  paymentMethods: (params: PaginationParams) => Promise<
-    Session["user"] & {
-      paymentMethods: Awaited<ReturnType<
-        typeof currentUserService.paymentMethods
-      > | null>
-    }
-  >
+  paymentMethods: (
+    params: PaginationParams
+  ) => Promise<Awaited<
+    ReturnType<typeof currentUserService.paymentMethods>
+  > | null>
   /**
    * Subscriptions
    *
@@ -118,33 +100,29 @@ interface CurrentUser {
    *
    * @param {number} page - The page number to get.
    * @param {number} limit - The number of subscriptions to get.
-   * @returns {Promise<Session["user"] & {subscriptions: Awaited<ReturnType<typeof currentUserService.subscriptions> | null>} - The subscriptions for the user.
+   * @returns {Promise<Awaited<ReturnType<typeof currentUserService.subscriptions>> | null>} - The subscriptions for the user.
    */
-  subscriptions: (params: PaginationParams) => Promise<
-    Session["user"] & {
-      subscriptions: Awaited<ReturnType<
-        typeof currentUserService.subscriptions
-      > | null>
-    }
-  >
+  subscriptions: (
+    params: PaginationParams
+  ) => Promise<Awaited<
+    ReturnType<typeof currentUserService.subscriptions>
+  > | null>
   /**
    * HasPurchasedProduct
    *
    * This function is used to check if a user has purchased a product.
    *
    * @param {string[]} productIds - The ids of the products to check.
-   * @returns {Promise<Session["user"] & {hasPurchasedProduct: Awaited<ReturnType<typeof currentUserService.hasPurchasedProduct> | null>}> - Whether the user has purchased the product.
+   * @returns {Promise<Awaited<ReturnType<typeof currentUserService.hasPurchasedProduct>> | null> - Whether the user has purchased the product.
    */
-  hasPurchasedProduct: (params: { productIds: string[] }) => Promise<
-    Session["user"] & {
-      hasPurchasedProduct: Awaited<ReturnType<
-        typeof currentUserService.hasPurchasedProduct
-      > | null>
-    }
-  >
+  hasPurchasedProduct: (params: {
+    productIds: string[]
+  }) => Promise<Awaited<
+    ReturnType<typeof currentUserService.hasPurchasedProduct>
+  > | null>
 }
 
-const currentUserService: CurrentUserService = {
+export const currentUserService: CurrentUserService = {
   /**
    * CustomerId
    *
@@ -181,35 +159,38 @@ const currentUserService: CurrentUserService = {
    * This function is used to get the invoices for a user.
    *
    * @param {string} userId - The id of the user.
-   * @param {number} page - The page number to get.
+   * @param {string} startingAfter - The starting after object id for pagination.
    * @returns {Promise<Invoice[]>} - The invoices for the user.
    */
-  invoices: cache(async ({ page = 1, userId }: InvoiceParams) => {
-    return await db.query.invoices.findMany({
-      where: (invoices, { eq }) => eq(invoices.userId, userId),
-      orderBy: (invoices, { desc }) => desc(invoices.created),
-      limit: invoicesLimit,
-      offset: (page - 1) * invoicesLimit,
-    })
-  }),
-  /**
-   * InvoicesTotal
-   *
-   * This function is used to get the total number of invoices for a user.
-   *
-   * @param {string} userId - The id of the user.
-   * @returns {Promise<number>} - The total number of invoices for the user.
-   */
-  invoicesTotal: cache(async ({ userId }: { userId: string }) => {
-    return (
-      (
-        await db
-          .select({ count: countAsNumber() })
-          .from(invoices)
-          .where(eq(invoices.userId, userId))
-      )[0].count ?? 0
-    )
-  }),
+  invoices: ({ cursor, userId }: InvoiceParams) =>
+    ioCache(
+      async () => {
+        const customerId = await currentUserService.customerId({ userId })
+        if (!customerId) {
+          return null
+        }
+
+        const params: Stripe.InvoiceListParams = {
+          customer: customerId,
+          limit: invoicesLimit,
+        }
+
+        if (cursor) {
+          params.starting_after = cursor
+        }
+
+        const invoices = await stripe.invoices.list(params)
+        return {
+          data: invoices.data,
+          hasMore: invoices.has_more,
+        }
+      },
+      [userId],
+      {
+        tags: ["invoices", `invoices:${userId}`],
+        revalidate: 60 * 60 * 24 * 30, // 30 days
+      }
+    )(),
   /**
    * PaymentMethods
    *
@@ -324,7 +305,7 @@ const createCurrentUserServiceProxy = <T extends object>(
               augmentedArgs
             )
 
-            return { ...user, [String(prop)]: result }
+            return result
           }
         }
 
