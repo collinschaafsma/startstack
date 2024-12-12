@@ -10,7 +10,7 @@
 
 "use server"
 
-import { unstable_after as after } from "next/server"
+import { after } from "next/server"
 import { Resend } from "resend"
 import { z } from "zod"
 import { captureEvent } from "@/lib/capture-event"

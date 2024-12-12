@@ -6,7 +6,7 @@
 
 "use server"
 
-import { unstable_after as after } from "next/server"
+import { after } from "next/server"
 import { z } from "zod"
 import { providers, signIn, signOut } from "@/auth"
 import { captureEvent } from "@/lib/capture-event"

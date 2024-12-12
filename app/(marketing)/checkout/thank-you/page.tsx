@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { unstable_after as after } from "next/server"
+import { after } from "next/server"
 import { checkout } from "@/services/checkout"
 import { captureEvent } from "@/lib/capture-event"
 import { appName } from "@/lib/constants"
