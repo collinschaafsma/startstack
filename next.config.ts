@@ -3,7 +3,6 @@ import { withSentryConfig } from "@sentry/nextjs"
 
 const nextConfig: NextConfig = {
   experimental: {
-    after: true,
     reactCompiler: true,
   },
   images: {
