@@ -74,7 +74,7 @@ export default function SignInForm({
               type="submit"
               aria-disabled={isPending}
               disabled={isPending}
-              className="flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              className="flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-xs hover:bg-gray-50 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-hidden"
               name="provider"
               value="google"
             >
@@ -93,7 +93,7 @@ export default function SignInForm({
                   <span className="w-full border-t" />
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-background px-2 text-muted-foreground">
+                  <span className="bg-background text-muted-foreground px-2">
                     Or
                   </span>
                 </div>
@@ -129,12 +129,12 @@ export default function SignInForm({
                 )}
                 Continue With Email
               </Button>
-              <p className="flex w-full justify-center rounded-md border border-gray-300 bg-muted p-4 text-sm text-gray-500 dark:text-gray-400 md:text-xs">
+              <p className="bg-muted flex w-full justify-center rounded-md border border-gray-300 p-4 text-sm text-gray-500 md:text-xs dark:text-gray-400">
                 We&apos;ll email you a magic link.
               </p>
-              <p className="flex w-full text-sm text-gray-500 dark:text-gray-400 md:text-xs">
+              <p className="flex w-full text-sm text-gray-500 md:text-xs dark:text-gray-400">
                 Don&apos;t have an account?{" "}
-                <Link href="/sign-up" className="pl-2 text-primary underline">
+                <Link href="/sign-up" className="text-primary pl-2 underline">
                   Sign up
                 </Link>
               </p>

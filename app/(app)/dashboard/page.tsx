@@ -33,7 +33,7 @@ export default function DashboardPage() {
         </>
       </Header>
       <main className="flex-1 p-6 md:p-4 md:py-0">
-        <div className="grid gap-4 md:max-w-screen-xl md:grid-cols-4">
+        <div className="grid gap-4 md:max-w-(--breakpoint-xl) md:grid-cols-4">
           <MRRCard />
           <GrossCard />
           <CustomersCard />

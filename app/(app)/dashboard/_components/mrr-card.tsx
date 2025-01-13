@@ -54,7 +54,7 @@ export async function LoadMRRCard() {
   return (
     <>
       <div className="text-2xl font-bold">${mrrData.current}</div>
-      <p className="text-xs text-muted-foreground">
+      <p className="text-muted-foreground text-xs">
         {mrrData.percentageChange >= 0 ? "+" : ""}
         {mrrData.percentageChange.toFixed(1)}% from last month
       </p>
@@ -82,7 +82,7 @@ export function MRRCard() {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">MRR</CardTitle>
-        <Receipt className="size-4 text-muted-foreground" />
+        <Receipt className="text-muted-foreground size-4" />
       </CardHeader>
       <CardContent>
         <ErrorBoundary fallback={<MRRCardErrorFallback />}>

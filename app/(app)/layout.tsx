@@ -44,7 +44,7 @@ export default function RootLayout({
       <PostHogProvider>
         <body
           className={cn(
-            "min-h-screen bg-background font-sans antialiased",
+            "bg-background min-h-screen font-sans antialiased",
             fontSans.variable
           )}
         >
@@ -56,8 +56,8 @@ export default function RootLayout({
               disableTransitionOnChange
             >
               <NavProvider>
-                <div className="flex min-h-screen w-full flex-col bg-muted/40">
-                  <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
+                <div className="bg-muted/40 flex min-h-screen w-full flex-col">
+                  <aside className="bg-background fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r sm:flex">
                     <DesktopNav />
                   </aside>
                   {children}

@@ -40,7 +40,7 @@ async function LoadProducts() {
               <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
                 Purchase
               </h2>
-              <p className="max-w-[900px] text-gray-500 dark:text-gray-400 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+              <p className="max-w-[900px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
                 Copy here
               </p>
             </div>
@@ -66,7 +66,7 @@ async function LoadProducts() {
                         product.prices[0].unitAmount,
                         product.prices[0].currency
                       )}{" "}
-                      <span className="text-sm font-normal text-muted-foreground">
+                      <span className="text-muted-foreground text-sm font-normal">
                         /one time
                       </span>
                     </div>
@@ -120,8 +120,8 @@ async function LoadProducts() {
                         priceInterval={price.interval}
                       >
                         {(price.metadata as Metadata)["trialPeriodDays"] && (
-                          <div className="absolute right-0 top-0 size-[200px] overflow-hidden">
-                            <div className="absolute right-[-80px] top-[30px] w-[280px] rotate-45 bg-yellow-400 py-1 text-center text-xs font-bold text-yellow-900 shadow-md">
+                          <div className="absolute top-0 right-0 size-[200px] overflow-hidden">
+                            <div className="absolute top-[30px] right-[-80px] w-[280px] rotate-45 bg-yellow-400 py-1 text-center text-xs font-bold text-yellow-900 shadow-md">
                               <span className="block w-full pl-8">
                                 {
                                   (price.metadata as Metadata)[
@@ -153,7 +153,7 @@ async function LoadProducts() {
                         >
                           <div className="flex items-center gap-4 text-4xl font-bold">
                             {centsToCurrency(price.unitAmount, price.currency)}{" "}
-                            <span className="text-sm font-normal text-muted-foreground">
+                            <span className="text-muted-foreground text-sm font-normal">
                               /{price.interval}
                             </span>
                           </div>

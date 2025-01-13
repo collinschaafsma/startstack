@@ -54,7 +54,7 @@ export function PaginatorProvider<T extends GenericData>({
     }
 
     setHasMore(responseToPaginate?.hasMore || false)
-  }, [cursor])
+  }, [cursor, responseToPaginate])
 
   const handleNextPage = () => {
     if (responseToPaginate?.data.length) {

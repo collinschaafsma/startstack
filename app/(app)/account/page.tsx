@@ -36,7 +36,7 @@ export default async function AccountPage(props: {
         </Breadcrumb>
       </Header>
       <main className="flex-1 p-6 md:p-4 md:py-0">
-        <div className="grid gap-4 md:max-w-screen-xl md:grid-cols-2">
+        <div className="grid gap-4 md:max-w-(--breakpoint-xl) md:grid-cols-2">
           <PaymentMethodCard />
           <SubscriptionPlanCard />
           <div className="flex flex-col gap-4 md:col-span-2">

@@ -42,7 +42,7 @@ export default function RootLayout({
       <PostHogProvider>
         <body
           className={cn(
-            "min-h-screen bg-background font-sans antialiased",
+            "bg-background min-h-screen font-sans antialiased",
             fontSans.variable
           )}
         >

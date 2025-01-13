@@ -54,7 +54,7 @@ export async function LoadCustomersCard() {
   return (
     <>
       <div className="text-2xl font-bold">{customersData.current}</div>
-      <p className="text-xs text-muted-foreground">
+      <p className="text-muted-foreground text-xs">
         {customersData.percentageChange >= 0 ? "+" : ""}
         {customersData.percentageChange.toFixed(1)}% from last month
       </p>
@@ -82,7 +82,7 @@ export function CustomersCard() {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">Customers</CardTitle>
-        <Users className="size-4 text-muted-foreground" />
+        <Users className="text-muted-foreground size-4" />
       </CardHeader>
       <CardContent>
         <ErrorBoundary fallback={<CustomersCardErrorFallback />}>

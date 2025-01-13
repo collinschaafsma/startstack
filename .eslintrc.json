@@ -4,12 +4,9 @@
   "extends": [
     "next/core-web-vitals",
     "next/typescript",
-    "prettier",
-    "plugin:tailwindcss/recommended"
+    "prettier"
   ],
-  "plugins": ["tailwindcss"],
   "rules": {
-    "tailwindcss/no-custom-classname": "off",
     "@typescript-eslint/no-unused-vars": [
       "error",
       {
@@ -22,12 +19,6 @@
         "ignoreRestSiblings": true
       }
     ]
-  },
-  "settings": {
-    "tailwindcss": {
-      "callees": ["cn", "cva"],
-      "config": "tailwind.config.ts"
-    }
   },
   "overrides": [
     {

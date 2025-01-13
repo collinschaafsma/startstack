@@ -20,7 +20,7 @@ export function DesktopNavLink({
     <Link
       href={href}
       className={cn(
-        "flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:size-8",
+        "text-muted-foreground hover:text-foreground flex size-9 items-center justify-center rounded-lg transition-colors md:size-8",
         active && "bg-accent text-accent-foreground",
         className
       )}
@@ -47,7 +47,7 @@ export function MobileNavLink({
       onClick={closeNav}
       href={href}
       className={cn(
-        "flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground",
+        "text-muted-foreground hover:text-foreground flex items-center gap-4 px-2.5",
         active && "text-foreground",
         className
       )}
