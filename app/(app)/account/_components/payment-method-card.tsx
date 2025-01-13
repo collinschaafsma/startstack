@@ -32,7 +32,7 @@ function PaymentMethodCardSkeleton() {
 function PaymentMethodCardErrorFallback() {
   return (
     <>
-      <CardContent className="flex flex-col gap-2 text-destructive">
+      <CardContent className="text-destructive flex flex-col gap-2">
         <div className="flex">We are sorry.</div>
         <div className="flex text-sm">
           An error occurred while fetching payment methods.

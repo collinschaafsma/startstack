@@ -6,7 +6,7 @@ import { MobileNav } from "./nav"
 
 export function Header({ children }: Readonly<{ children?: React.ReactNode }>) {
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center justify-between gap-4 bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent md:ml-4 md:max-w-(--breakpoint-xl) md:pl-2 md:pr-0">
+    <header className="bg-background sticky top-0 z-30 flex h-14 items-center justify-between gap-4 px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent md:ml-4 md:max-w-(--breakpoint-xl) md:pr-0 md:pl-2">
       <MobileNav />
       {/* this allows you to optionally pass in other components like a breadcrumb or a search component from the page */}
       {children}

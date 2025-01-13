@@ -57,7 +57,7 @@ async function LoadNewsletterContactsCard() {
   return (
     <>
       <div className="text-2xl font-bold">{data.current}</div>
-      <p className="text-xs text-muted-foreground">
+      <p className="text-muted-foreground text-xs">
         {data.percentageChange >= 0 ? "+" : ""}
         {data.percentageChange.toFixed(1)}% from last month
       </p>
@@ -97,7 +97,7 @@ export function NewsletterContactsCard() {
         <CardTitle className="text-sm font-medium">
           Newsletter Contacts
         </CardTitle>
-        <Mail className="size-4 text-muted-foreground" />
+        <Mail className="text-muted-foreground size-4" />
       </CardHeader>
       <CardContent>
         <ErrorBoundary fallback={<NewsletterContactsCardErrorFallback />}>

@@ -55,7 +55,7 @@ async function LoadGrossCard() {
   return (
     <>
       <div className="text-2xl font-bold">${grossData.current}</div>
-      <p className="text-xs text-muted-foreground">
+      <p className="text-muted-foreground text-xs">
         {grossData.percentageChange >= 0 ? "+" : ""}
         {grossData.percentageChange.toFixed(1)}% from last month
       </p>
@@ -83,7 +83,7 @@ export function GrossCard() {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">Gross</CardTitle>
-        <Landmark className="size-4 text-muted-foreground" />
+        <Landmark className="text-muted-foreground size-4" />
       </CardHeader>
       <CardContent>
         <ErrorBoundary fallback={<GrossCardErrorFallback />}>

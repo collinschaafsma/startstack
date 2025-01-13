@@ -56,7 +56,7 @@ export function SubscriptionIntervalSwitch() {
     useSubscriptionInterval()
 
   return (
-    <div className="flex items-center rounded-full bg-muted p-1">
+    <div className="bg-muted flex items-center rounded-full p-1">
       <button
         type="button"
         className={`rounded-full px-4 py-2 transition-colors ${

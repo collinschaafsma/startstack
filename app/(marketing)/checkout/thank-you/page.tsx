@@ -57,7 +57,7 @@ export default async function ThankYouPage(props: {
           </h2>
           <AuthBoundary
             alternate={
-              <p className="mx-auto max-w-[600px] text-sm text-gray-500 dark:text-gray-400 md:text-xl">
+              <p className="mx-auto max-w-[600px] text-sm text-gray-500 md:text-xl dark:text-gray-400">
                 You are minutes away from getting started with {appName}. An
                 email was sent to{" "}
                 <strong>
@@ -67,7 +67,7 @@ export default async function ThankYouPage(props: {
               </p>
             }
           >
-            <p className="mx-auto max-w-[600px] text-sm text-gray-500 dark:text-gray-400 md:text-xl">
+            <p className="mx-auto max-w-[600px] text-sm text-gray-500 md:text-xl dark:text-gray-400">
               <Button asChild>
                 <Link href="/account">Go to your account</Link>
               </Button>
